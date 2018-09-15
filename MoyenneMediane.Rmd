@@ -78,7 +78,7 @@ median(X)*median(Y)
 median(X*Y)
 ```
 
-Les quantiles
+Les quantiles modifiés
 
 ```{r}
 quantile(X,0.25)
