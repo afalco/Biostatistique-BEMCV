@@ -1,0 +1,88 @@
+---
+title: "MoyennevsMediane"
+author: "Antonio Falco"
+date: "12/9/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Moyenne d'un nuage de points
+
+```{r}
+x <- rnorm(10,165,4)
+mean(x)
+z <- rep(mean(x),length(x))
+plot(x,x,col='red')
+points(z,z)
+```
+Médiane d'un nuage de points
+
+```{r}
+median(x)
+z <- rep(median(x),length(x))
+plot(x,x,col='red')
+points(z,z)
+```
+
+Comportement de la moyenne avec les valeurs extrêmes
+
+```{r}
+x[11] <- 300
+mean(x)
+z <- rep(mean(x),length(x))
+plot(x,x,col='red')
+points(z,z)
+```
+
+Comportement de la médiane avec les valeurs extrêmes
+
+```{r}
+median(x)
+z <- rep(median(x),length(x))
+plot(x,x,col='red')
+points(z,z)
+```
+
+Propriétés de la moyenne
+
+```{r}
+X <- rnorm(100,165,4)
+Y <- rnorm(100,153,5)
+a <- 2
+b <- 3
+c <- 4
+Z <- a*X+b*Y+c
+mean(Z)
+a*mean(X)+b*mean(Y)+c
+mean(X)*mean(Y)
+mean(X*Y)
+```
+
+Propriétés de la médiane
+
+```{r}
+X <- rnorm(100,165,4)
+Y <- rnorm(100,153,5)
+a <- 2
+b <- 3
+c <- 4
+Z <- a*X+b*Y+c
+median(Z)
+a*median(X)+b*median(Y)+c
+median(X)*median(Y)
+median(X*Y)
+```
+
+Les quantiles
+
+```{r}
+quantile(X,0.25)
+quantile(X,0.5)
+quantile(X,0.75)
+hist(X)
+```
