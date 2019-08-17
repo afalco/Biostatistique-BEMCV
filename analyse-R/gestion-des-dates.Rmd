@@ -1,0 +1,15 @@
+---
+title: "Gestion des dates"
+---
+
+```{r options_communes, include=FALSE}
+source("options_communes.R")
+```
+
+
+
+Si R fournit quelques fonctions natives pour la gestion des dates, l'extension `lubridate`{.pkg} est recommandée pour tout travail un peu plus fin sur des dates. On pourra se référer :
+
+- au chapitre <q>Dates and Times</q> de l'ouvrage *R for Data Science* de Garrett Grolemund et Hadley Wickham (en anglais)
+- à la vignette officielle  (<https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html>, en anglais)
+- à ce tutoriel (<https://rpubs.com/davoodastaraky/lubridate>)

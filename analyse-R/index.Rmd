@@ -1,0 +1,157 @@
+---
+title: "analyse-R"
+output:
+  html_document:
+    toc: false
+---
+
+```{r options, results='hide', echo=FALSE, message=FALSE, warning=FALSE}
+if (Sys.info()["sysname"] == "Windows") {
+  Sys.setlocale("LC_TIME", "french")
+} else  {
+  Sys.setlocale("LC_TIME", "fr_FR");
+}
+require(lubridate)
+```
+
+
+<div class="jumbotron">
+  <h1>Introduction <br />à l'analyse d'enquêtes <br />avec R et RStudio</h1>
+  <p>Dernière mise à jour : `r I(format(today(), "%e %B %Y"))`</p>
+</div>
+
+[![DOI](https://zenodo.org/badge/34986666.svg)](https://zenodo.org/badge/latestdoi/34986666)
+
+## Contributeurs
+
+**Par ordre alphabétique :**
+
+Julien Barnier, 
+Julien Biaudet,
+François Briatte,
+Milan Bouchet-Valat, 
+Ewen Gallic,
+Frédérique Giraud,
+Joël Gombin,
+Mayeul Kauffmann,
+Christophe Lalanne,
+Joseph Larmarange,
+Nicolas Robette.
+
+**Création et Maintenance :**
+
+Joseph Larmarange --- <http://joseph.larmarange.net>
+
+## Présentation{#presentation}
+
+L'objectif premier d'**analyse-R** est de présenter comment réaliser des analyses statistiques
+et diverses opérations courantes (comme la manipulation de données ou la production de graphiques) avec **R**. 
+Il ne s'agit pas d'un cours de statistiques : les différents chapitres présupposent donc que vous avez déjà 
+une connaissance des différentes techniques présentées.
+Si vous souhaitez des précisions théoriques / méthodologiques à propos d'un certain type
+d'analyses, nous vous conseillons d'utiliser votre moteur de recherche préféré. En effet, on trouve sur 
+internet de très nombreux supports de cours (sans compter les nombreux ouvrages spécialisés disponibles
+en libraririe).
+
+
+## Table des matières{#tdm}
+
+Si vous débutez avec **R** et **RStudio**, nous vous conseillons de parcourir en premier lieu
+les chapitres suivants :
+
+1. Manipuler > Prise en main
+2. Analyser > Statistiques introductives
+3. Manipuler > Manipulations de données
+4. Analyser > Statistiques intermédiares
+
+puis de compléter votre lecture en fonction de vos besoins.
+
+```{r tdm semi-programmatique, message=FALSE, echo=FALSE}
+base_url <- "http://larmarange.github.io/analyse-R/"
+urls <- paste0(base_url, "index.html")
+
+tdm <- function(section) {
+  require(xml2)
+  res <- "<div class=\"row\">\n"
+  
+  menu <- read_html("include/before_body.html", encoding = "UTF-8")
+  section <- xml_find_first(menu, paste0(".//ul[@id='menu_", section, "']"))
+  sous_sections <- xml_find_all(section, ".//ul")
+  
+  for (ss in sous_sections) {
+    res <- paste0(res, "<div class=\"col-md-4\">\n")
+    titre <- as.character(xml_contents(xml_find_first(ss, ".//li[@class='dropdown-header']")))
+    Encoding(titre) <- "UTF-8"
+    res <- paste0(res, "<p><strong>", titre, "</strong></p>\n")
+    res <- paste0(res, "<div class=\"list-group\">\n")
+    
+    items <- xml_find_all(ss, ".//a")
+    for (item in items) {
+      lien <- xml_attr(item, "href")
+      titre <- paste0(as.character(xml_contents(item)), collapse = "")
+      Encoding(titre) <- "UTF-8"
+      res <- paste0(res, "<a href=\"", lien,"\" class=\"list-group-item\">", titre, "</a>\n")
+      urls <<- c(urls, paste0(base_url, lien))
+    }
+
+    res <- paste0(res, "</div>\n</div>\n\n")
+  }
+  
+  res <- paste0(res, "</div>")
+  return(res[1])
+}
+```
+
+### Manipuler
+
+```{r, results='asis', echo=FALSE, message=FALSE}
+cat(tdm("manipuler"))
+```
+
+
+### Analyser
+
+```{r, results='asis', echo=FALSE, message=FALSE}
+cat(tdm("analyser"))
+```
+
+### Approfondir
+
+```{r, results='asis', echo=FALSE, message=FALSE}
+cat(tdm("approfondir"))
+```
+
+### Index
+
+<div class="list-group">
+  <a href="index-des-concepts.html" class="list-group-item">Index des concepts</a>
+  <a href="index-des-fonctions.html" class="list-group-item">Index des fonctions</a>
+  <a href="index-des-extensions.html" class="list-group-item">Index des extensions</a>
+</div>
+
+```{r sitemap automatique, echo=FALSE, message=FALSE}
+urls <- c(urls, paste0(base_url, "index-des-concepts.html"))
+urls <- c(urls, paste0(base_url, "index-des-fonctions.html"))
+urls <- c(urls, paste0(base_url, "index-des-extensions.html"))
+cat(urls, sep="\n", file="sitemap.txt")
+```
+
+## Licence
+
+Le contenu de ce site est diffusé sous licence 
+*Creative Commons Attribution - Pas d'utilisation commerciale - Partage dans les mêmes conditions* 
+(<https://creativecommons.org/licenses/by-nc-sa/3.0/fr/>).
+
+![CC by-nc-sa](images\by-nc-sa.svg)
+
+Cela signifie donc que vous êtes libre de recopier / modifier / redistribuer les contenus d'**analyse-R**,
+à condition que vous citiez la source et que vos modifications soient elle-mêmes distribuées sous la 
+même licence (autorisant ainsi d'autres à pouvoir réutiliser à leur tour vos ajouts).
+
+## Contribuer
+
+**analyse-R** est développé avec **RStudio** et le code source est librement disponible sur **GitHub** :<br />
+<https://github.com/larmarange/analyse-R>.
+
+Ce projet se veut collaboratif. N'hésitez donc pas à proposer des corrections ou ajouts, voire même
+à rédiger des chapitres additionnels.

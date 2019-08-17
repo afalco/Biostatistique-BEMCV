@@ -1,0 +1,819 @@
+---
+title: "Régression logistique binaire, multinomiale et ordinale"
+---
+
+```{r options_communes, include=FALSE}
+source("options_communes.R")
+```
+
+<div class="note">
+La version originale de ce chapitre a été écrite par Joseph Larmarange dans le cadre du support de cours
+[Introduction à l'analyse d'enquêtes avec R](https://github.com/larmarange/intro-r/tree/CoursM2).
+</div>
+
+La <dfn>régression logistique</dfn><dfn data-index="logistique, régression"></dfn> est fréquemment 
+utilisée en sciences sociales car elle permet d'effectuer un
+raisonnement dit *toutes choses étant égales par ailleurs*. Plus précisément, la régression logistique a
+pour but d'isoler les effets de chaque variable, c'est-à-dire d'identifier les effets résiduels d'une 
+<dfn>variable explicative</dfn><dfn data-index="explicative, variable"></dfn> sur une 
+<dfn>variable d'intérêt</dfn>, une fois pris en compte les autres variables explicatives introduites
+dans le modèle. La régression logistique est ainsi prisée en épidémiologie pour identifier les facteurs associés
+à telle ou telle pathologie.
+
+La <dfn>régression logistique ordinaire</dfn><dfn data-index="ordinaire, régression logistique"></dfn> ou 
+<dfn>régression logistique binaire</dfn><dfn data-index="binaire, régression logistique"></dfn> 
+vise à expliquer une variable d'intérêt binaire (c'est-à-dire de type « oui / non » ou « vrai / faux »). 
+Les variables explicatives qui seront introduites dans le modèle peuvent être 
+<dfn data-index="variable quantitative">quantitatives</dfn><dfn data-index="quantitative, variable"></dfn> ou 
+<dfn data-index="variable qualitative">qualitatives</dfn><dfn data-index="qualitative, variable"></dfn>.
+
+La <dfn>régression logistique multinomiale</dfn><dfn data-index="multinomiale, régression logistique"></dfn>
+est une extension de la régression logistique aux variables qualitatives à trois modalités ou plus, 
+la <dfn>régression logistique ordinale</dfn><dfn data-index="ordinale, régression logistique"></dfn>
+aux variables qualitatives à trois modalités ou plus qui sont ordonnées hiérarchiquement. 
+
+## Préparation des données
+
+Dans ce chapite, nous allons encore une fois utiliser les données de l'enquête *Histoire de vie*, fournies
+avec l'extension `questionr`{.pkg}.
+
+```{r, warning=FALSE}
+library(questionr)
+data(hdv2003)
+d <- hdv2003
+```
+
+À titre d'exemple, nous allons étudier l'effet de l'âge, du sexe, du niveau d'étude, de la pratique
+religieuse et du nombre moyen d'heures passées à regarder la télévision par jour sur le fait de pratiquer un sport.
+
+En premier lieu, il importe de vérifier que notre variable d'intérêt (ici *sport*) est correctement codée.
+Une possibilité consiste à créer une <dfn>variable booléenne</dfn><dfn data-index="booléenne, variable"></dfn>
+(vrai / faux) selon que l'individu a pratiqué du
+sport ou non :
+
+```{r}
+d$sport2 <- FALSE
+d$sport2[d$sport == "Oui"] <- TRUE
+```
+
+Dans le cas présent, cette variable n'a pas de <dfn>valeur manquante</dfn><dfn data-index="manquante, valeur"></dfn>. 
+Mais, le cas échéant, il importe de bien coder les valeurs manquantes en `NA`, 
+les individus en question étant alors exclu de l'analyse.
+
+Il n'est pas forcément nécessaire de transformer notre variable d'intérêt en variable booléenne. En
+effet, **R** accepte sans problème une variable de type <dfn>facteur</dfn>. 
+Cependant, l'ordre des valeurs d'un facteur a de l'importance. 
+En effet, **R** considère toujours la première modalité comme étant la 
+<dfn>modalité de référence</dfn><dfn data-index="référence, modalité"></dfn>.
+Dans le cas de la variable d'intérêt, la modalité de référence correspond au fait de ne pas remplir le critère
+étudié, dans notre exemple au fait de ne pas avoir eu d'activité sportive au cours des douze derniers mois.
+
+Pour connaître l'ordre des modalités d'une variable de type facteur, on peut utiliser la fonction `levels`{data-pkg="base"} ou bien encore tout simplement la fonction `freq`{data-pkg="questionr"} 
+de l'extension `questionr`{.pkg} :
+
+```{r}
+levels(d$sport)
+freq(d$sport)
+```
+
+Dans notre exemple, la modalité « Non » est déjà la première modalité. Il n'y a donc pas besoin de
+modifier notre variable. Si ce n'est pas le cas, il faudra modifier la modalité de référence avec la fonction
+`relevel`{data-pkg="stats"} comme nous allons le voir un peu plus loin.
+
+<div class="important">
+Il est possible d'indiquer un facteur à plus de deux modalités. Dans une telle situation, **R** considérera que
+tous les modalités, sauf la modalité de référence, est une réalisation de la variable d'intérêt. Cela serait
+correct, par exemple, si notre variable *sport* était codée ainsi : « Non », « Oui, toutes les semaines », « Oui, au
+moins une fois par mois », « Oui, moins d'une fois par mois ». Cependant, afin d'éviter tout risque d'erreur ou
+de mauvaise interprétation, il est vivement conseillé de recoder au préalable sa variable d'intérêt en un facteur à
+deux modalités.
+</div>
+
+La notion de modalité de référence s'applique également aux variables explicatives qualitatives. En
+effet, dans un modèle, tous les coefficients sont calculés par rapport à la modalité de référence. Il importe
+de choisir une modalité de référence qui fasse sens afin de faciliter l'interprétation. Par ailleurs, ce choix
+peut également dépendre de la manière dont on souhaite présenter les résultats. De manière générale on
+évitera de choisir comme référence une modalité peu représentée dans l'échantillon ou bien une modalité
+correspondant à une situation atypique.
+
+Prenons l'exemple de la variable *sexe*. Souhaite-t-on connaitre l'effet d'être une femme par rapport au
+fait d'être un homme ou bien l'effet d'être un homme par rapport au fait d'être une femme ? Si l'on opte
+pour le second, alors notre modalité de référence sera le sexe féminin. Comme est codée cette variable ?
+
+```{r}
+freq(d$sexe)
+```
+
+La modalité « Femme » s'avère ne pas être la première modalité. Nous devons appliquer la fonction
+`relevel`{data-pkg="stats"} :
+
+```{r}
+d$sexe <- relevel(d$sexe, "Femme")
+freq(d$sexe)
+```
+
+<div class="important">
+**Données labellisées**
+
+Si l'on utilise des données labellisées (voir le [chapitre dédié](facteurs-et-vecteurs-labellises.html#labelled)), nos variables catégorielles seront stockées sous la forme d'un vecteur numérique avec des étiquettes. Il sera donc nécessaire de convertir ces variables en facteurs, tout simplement avec la fonction `to_factor`{data-pkg="labelled"} de l'extension `labelled`{.pkg} qui pourra utiliser les étiquettes de valeurs comme modalités du facteur.
+</div>
+
+Les variables *age* et *heures.tv* sont des variables quantitatives. Il importe de vérifier qu'elles sont
+bien enregistrées en tant que variables numériques. En effet, il arrive parfois que dans le fichier source les
+variables quantitatives soient renseignées sous forme de valeur textuelle et non sous forme numérique.
+
+```{r}
+str(d$age)
+str(d$heures.tv)
+```
+
+Nos deux variables sont bien renseignées sous forme numérique.
+
+Cependant, l'effet de l'âge est rarement linéaire. Un exemple trivial est par exemple le fait d'occuper
+un emploi qui sera moins fréquent aux jeunes âges et aux âges élevés. Dès lors, on pourra transformer la
+variable *age* en groupe d'âges avec la fonction `cut`{data-pkg="base"}
+(voir le chapitre [Manipulation de données](pem_manipulation.html#decouper_en_classes)) :
+
+```{r}
+d$grpage <- cut(d$age, c(16, 25, 45, 65, 99), right = FALSE, include.lowest = TRUE)
+freq(d$grpage)
+```
+
+Jetons maintenant un oeil à la variable *nivetud* :
+
+```{r}
+freq(d$nivetud)
+```
+
+En premier lieu, cette variable est détaillée en pas moins de huit modalités dont certaines sont peu
+représentées (seulement 39 individus soit 2 % n'ont jamais fait d'études par exemple). Afin d'améliorier
+notre modèle logistique, il peut être pertinent de regrouper certaines modalités (voir 
+le chapitre [Manipulation de données](pem_manipulation.html#regrouper_modalites)) :
+
+```{r}
+d$etud <- d$nivetud
+levels(d$etud) <- c(
+  "Primaire", "Primaire", "Primaire", 
+  "Secondaire", "Secondaire", "Technique/Professionnel", 
+  "Technique/Professionnel", "Supérieur"
+  )
+freq(d$etud)
+```
+
+Notre variable comporte également 112 individus avec une valeur manquante. Si nous conservons
+cette valeur manquante, ces 112 individus seront, par défaut, exclus de l'analyse. Ces valeurs manquantes
+n'étant pas négligeable (5,6 %), nous pouvons également faire le choix de considérer ces valeurs manquantes
+comme une modalité supplémentaire. Auquel cas, nous utiliserons la fonction `addNAstr`{data-pkg="questionr"} fournie par `questionr`{.pkg}^[Il existe également une fonction `add.NA`{data-pkg="base"} fournie avec **R**. Mais elle ne permet pas de choisir l'étiquette du nouveau niveau créé. Plus spécfiquement, cette étiquette est `NA` et non une valeur textuelle, ce qui peut créer des problèmes avec certaines fonctions.] :
+
+```{r}
+levels(d$etud)
+d$etud <- addNAstr(d$etud, "manquant")
+levels(d$etud)
+```
+
+## Régression logistique binaire
+
+La fonction `glm`{data-pkg="stats"} (pour <dfn lang="en">generalized linear models</dfn> soit
+<dfn>modèle linéaire généralisé</dfn> en français) 
+permet de calculer une grande variété de modèles statistiques. 
+La régression logistique ordinaire correspond au modèle *logit* de la famille des modèles binomiaux,
+ce que l'on indique à `glm`{data-pkg="stats"} avec l'argument `family=binomial(logit)`.
+
+Le modèle proprement dit sera renseigné sous la forme d'une <dfn>formule</dfn> 
+(que nous avons déjà rencontrée dans le chapitre sur la [statistique bivariée](statistique-bivariee.html)
+et présentée plus en détails dans un [chapitre dédié](formules.html)). 
+On indiquera d'abord la variable d'intérêt, suivie du signe `~` (que l'on obtient en appuyant sur les touches
+<kbd>Alt Gr</kbd> et <kbd>3</kbd> sur un clavier de type PC) puis de la liste des variables explicatives
+séparées par un signe `+`. Enfin, l'argument `data` permettra d'indiquer notre tableau de données.
+
+```{r}
+reg <- glm(sport ~ sexe + grpage + etud + relig + heures.tv, data = d, family = binomial(logit))
+reg
+```
+
+<div class="note">
+Il est possible de spécifier des modèles plus complexes. Par exemple, `x:y` permet d'indiquer l'interaction
+entre les variables *x* et *y*. `x * y` sera équivalent à `x + y + x:y`. Pour aller plus loin, voir 
+<http://ww2.coastal.edu/kingw/statistics/R-tutorials/formulae.html>.
+</div>
+
+Une présentation plus complète des résultats est obtenue avec la méthode `summary`{data-pkg="stats" data-rdoc="summary.glm"} :
+
+```{r}
+summary(reg)
+```
+
+Dans le cadre d'un modèle logistique, généralement on ne présente pas les 
+<dfn data-index="coefficient, modèle">coefficients</dfn> du modèle mais
+leur valeur exponentielle, cette dernière correspondant en effet à des 
+<dfn data-index="odds ratio" lang="en">odds ratio</dfn>, également appelés 
+<dfn data-index="rapport des cotes">rapports des cotes</dfn>. 
+L'odds ratio diffère du <dfn>risque relatif</dfn><dfn data-index="relatif, risque"></dfn>. 
+Cependent son interprétation est similaire. 
+Un *odds ratio* de 1 signifie l'absence d'effet. Un *odds ratio* largement supérieur à 1 correspond à une
+augmentation du phénomène étudié et un *odds ratio* largement inféieur à 1 correspond à une diminution du 
+phénomène étudié^[Pour plus de détails, voir <http://www.spc.univ-lyon1.fr/polycop/odds%20ratio.htm>.].
+
+La fonction `coef`{data-pkg="stats"} permet d'obtenir les coefficients d'un modèle, 
+`confint`{data-pkg="stats"} leurs intervalles de confiance
+et `exp`{data-pkg="base" data-rdoc="log"} de calculer l'exponentiel. 
+Les *odds ratio* et leurs 
+<dfn data-index="intervalle de confiance d'un odds ratio">intervalles de confiance</dfn><dfn data-index="odds ratio, intervalle de confiance"></dfn>
+s'obtiennent ainsi :
+
+```{r}
+exp(coef(reg))
+exp(confint(reg))
+```
+
+On pourra faciliter la lecture en combinant les deux :
+
+```{r}
+exp(cbind(coef(reg), confint(reg)))
+```
+
+Pour savoir si un *odds ratio* diffère significativement de 1 (ce qui est identique au fait que le coefficient
+soit différent de 0), on pourra se référer à la colonne *Pr(>|z|)* obtenue avec 
+`summary`{data-pkg="stats" data-rdoc="summary.glm"}.
+
+Si vous disposez de l'extension `questionr`{.pkg}, la fonction `odds.ratio`{data-pacakge="questionr"} permet de calculer directement les *odds ratio*, 
+leur intervalles de confiance et les *p-value* :
+
+```{r}
+library(questionr)
+odds.ratio(reg)
+```
+
+### Représentation graphique du modèle
+
+Il est possible de représenter graphiquement les différents odds ratios. Pour cela, on va utiliser la fonction `tidy`{data-pkg="broom" data-rdoc="gm_tidiers"} de l'extension `broom`{.pkg} pour récupérer les coefficients du modèle sous la forme d'un tableau de données exploitable avec `ggplot2`{.pkg}. On précisera `conf.int = TRUE` pour obtenir les intervalles de confiance et `exponentiate = TRUE` pour avoir les odds ratio plutôt que les coefficients bruts. `geom_errorbarh`{data-pkg="ggplot2" data-rdoc="geom_crossbar"} permets de représenter les intervalles de confiance sous forme de barres d'erreurs, `geom_vline`{data-pkg="ggplot2" data-rdoc="geom_abline"} une ligne verticale au niveau `x = 1`, `scale_x_log10`{data-pkg="ggplot2" data-rdoc="scale_continuous"} pour afficher l'axe des `x` de manière logarithmique, les odds ratios étant de nature multiplicative et non additive.
+
+<figure>
+```{r}
+library(broom)
+tmp <- tidy(reg, conf.int = TRUE, exponentiate = TRUE)
+str(tmp)
+library(ggplot2)
+ggplot(tmp) + 
+  aes(x = estimate, y = term, xmin = conf.low, xmax = conf.high) +
+  geom_vline(xintercept = 1) +
+  geom_errorbarh() +
+  geom_point() +
+  scale_x_log10()
+```
+<figcaption>Représentation graphique des odds ratios</figcaption>
+</figure>
+
+La fonction `ggcoef`{data-pkg="GGally"} de l'extension `GGally`{.pkg} permet d'effectuer le graphique précédent directement à partir de notre modèle. Voir l'aide de cette fonction pour la liste complète des paramètres personnalisables.
+
+<figure>
+```{r}
+library(GGally)
+ggcoef(reg, exponentiate = TRUE)
+```
+<figcaption>La fonction ggcoef</figcaption>
+</figure>
+
+
+<div class="note">
+L'extension `JLutils`{.pkg}, disponible uniquement sur GitHub, propose une fonction intéressante dans ce contexte. Pour l'installer ou la mettre à jour, si ce n'est déjà fait, on aura recours à la commande ci-après.
+
+```{r, eval=FALSE}
+devtools::install_github("larmarange/JLutils")
+```
+
+La fonction `tidy_detailed`{data-pkg="JLutils"} est une version <q>élargie</q> de `tidy`{data-pkg="broom"} qui rajoute des colonnes supplémentaires avec le nom des variables et des modalités.
+
+```{r}
+str(tidy(reg))
+library(JLutils)
+str(tidy_detailed(reg))
+```
+
+Il est possible de combiner `tidy_detailed`{data-pkg="JLutils"} avec `ggcoef`{data-pkg="GGally"} pour personnaliser un peu plus le résultat.
+
+```{r}
+td <- tidy_detailed(reg, exponentiate = TRUE, conf.int = TRUE)
+td$level_detail <- factor(td$label, rev(td$level_detail)) # Pour fixer l'ordre pour ggplot2
+ggcoef(
+  td, 
+  mapping = aes(y = level_detail, x = estimate, colour = variable_label), 
+  exponentiate = TRUE
+)
+```
+</div>
+
+L'extension `forestmodel`{.pkg} propose de son côté une fonction `forest_model`{pkg = "forestmodel"} qui, à partir d'un modèle, propose une représentation visuelle et tabulaire des coefficients.
+
+<figure>
+```{r, fig.width=12, fig.height=8}
+library(forestmodel)
+forest_model(reg)
+```
+<figcaption>La fonction forest_model
+</figcaption>
+</figure>
+
+### Représentation graphique des effets
+
+L'extension `effects`{.pkg} propose une représentation graphique résumant les effets de chaque variable du modèle. Pour cela, il suffit d'appliquer la méthode `plot`{data-pkg="effects" data-rdoc="summary.effect"} au résultat de la fonction `allEffects`{data-pkg="effects" data-rdoc="effect"}. Nous obtenons alors la [figure ci-dessous](#reglog_alleffects).
+
+<figure id="reglog_alleffects">
+```{r plot_allEffects, warning=FALSE}
+library(effects)
+plot(allEffects(reg))
+```
+<figcaption>Représentation graphique de l'effet de chaque variable du modèle logistique</figcaption>
+</figure>
+
+Nous pouvons alternativement avoir recours à l'extension `ggeffects`{.pkg}^[Cette extension est livrée avec de nombreuses vignettes dont une [vignette d'introduction](https://cran.r-project.org/web/packages/ggeffects/vignettes/marginaleffects.html) présentant le fonctionnement des différentes fonctions.] et sa fonction `ggeffect`{data-pkg="ggeffects"} qui permettent de récupérer les résultats de `effects`{.pkg} dans un format utilisable avec `ggplot2`{.pkg}.
+
+Ainsi, la fonction `ggeffect`{data-pkg="ggeffects"}, quand on lui précise un terme spécifique, produit un tableau de données avec les effets marginaux pour cette variable.
+
+```{r}
+library(ggeffects)
+ggeffect(reg, "sexe")
+```
+
+En combinant ce résultat avec `plot`{data-pkg="effects"}, on obtient un graphique `ggplot2`{.pkg} de l'effet en question.
+
+<figure>
+```{r}
+plot(ggeffect(reg, "sexe"))
+```
+<figcaption>Effet du sexe représenté avec ggeffect</figcaption>
+</figure>
+
+Si l'on ne précise pas de terme, `ggeffect(reg)` calcule les effets pour chaque variable du modèle et `plot(ggeffect(reg))` renvoie une liste de graphiques. Il faut donc utiliser la fonction `plot_grid`{data-pkg="cowplot"} de `cowplot`{.pkg} pour combiner ces graphiques en un seul (voir le [chapitre dédié](combiner-plusieurs-graphiques.html)).
+
+<figure>
+```{r, fig.width=12, fig.height=8}
+library(ggeffects)
+cowplot::plot_grid(plotlist = plot(ggeffect(reg)))
+```
+<figcaption>Effet du modèles représentés avec ggeffect</figcaption>
+</figure>
+
+
+Si l'on souhaite avoir des noms de variables plus explicites, il faut ajouter des étiquettes des variables avec `var_label`{data-pkg="labelled"} de l'extension `labelled`{.pkg} (voir le [chapitre sur les vecteurs labellisés](facteurs-et-vecteurs-labellises.html#les-etiquettes-de-variable)).
+
+Par contre, cette étape doit avoir eu lieu avant le calcul de la régression linéaire.
+
+```{r}
+library(labelled)
+var_label(d$sport) <- "Pratique du sport ?"
+var_label(d$sexe) <- "Sexe"
+var_label(d$grpage) <- "Groupe d'âges"
+var_label(d$etud) <- "Niveau d'étude"
+var_label(d$relig) <- "Pratique religieuse"
+var_label(d$heures.tv) <- "Nombre d'heures passées devant la télévision par jour"
+reg <- glm(sport ~ sexe + grpage + etud + relig + heures.tv, data = d, family = binomial(logit))
+```
+
+<figure>
+```{r, fig.width=12, fig.height=8}
+cowplot::plot_grid(plotlist = plot(ggeffect(reg)))
+```
+<figcaption>Effet du modèles avec étiquettes de variable</figcaption>
+</figure>
+
+### Matrice de confusion
+
+Une manière de tester la qualité d'un modèle est le calcul d'une 
+<dfn>matrice de confusion</dfn><dfn data-index="confusion, matrice"></dfn>, c'est-à-dire le
+tableau croisé des valeurs observées et celles des valeurs prédites en appliquant le modèle aux données
+d'origine.
+
+La méthode `predict`{data-pkg="stats" data-rdoc="predict.glm"} avec l'argument `type="response"`
+permet d'appliquer notre modèle logistique à un tableau de données et renvoie pour chaque individu 
+la probabilité qu'il ait vécu le phénomène étudié.
+
+```{r}
+sport.pred <- predict(reg, type = "response", newdata = d)
+head(sport.pred)
+```
+
+
+Or notre variable étudiée est de type binaire. Nous devons donc transformer nos probabilités prédites
+en une variable du type « oui / non ». Usuellement, les probabilités prédites seront réunies en deux groupes
+selon qu'elles soient supérieures ou inférieures à la moitié. La matrice de confusion est alors égale à :
+
+```{r}
+table(sport.pred > 0.5, d$sport)
+```
+
+Nous avons donc 583 (384+199) prédictions incorrectes sur un total de 1993, soit un taux de mauvais
+classement de 29,3 %.
+
+### Identifier les variables ayant un effet significatif
+
+Les p-values associées aux odds ratios nous indique si un odd ratio est significativement différent de 1, par rapport à la modalité de référebce. Mais cela n'indique pas si globalement une variable a un effet significatif sur le modèle. Pour tester l'effet global sur un modèle, on peut avoir recours à la fonction `drop1`{data-pkg="stats"}. Cette dernière va tour à tour supprimer chaque variable du modèle et réaliser une analyse de variance (ANOVA, voir fonction `anova`{data-pkg="stats"}) pour voir si la variance change significativement.
+
+```{r}
+drop1(reg, test = "Chisq")
+```
+
+Ainsi, dans le cas présent, la suppression de la variable <var>relig</var> ne modifie significativement pas le modèle, indiquant l'absence d'effet de cette variable.
+
+### Sélection de modèles
+
+Il est toujours tentant lorsque l'on recherche les facteurs associés à un phénomène d'inclure un nombre
+important de variables explicatives potentielles dans un mmodèle logistique. Cependant, un tel modèle
+n'est pas forcément le plus efficace et certaines variables n'auront probablement pas d'effet significatif sur
+la variable d'intérêt.
+
+La technique de <dfn>sélection descendante pas à pas</dfn><dfn data-index="pas à pas, sélection descendante"></dfn>
+est une approche visant à améliorer son modèle explicatif^[Il existe également des méthodes 
+de *sélection ascendante pas à pas*, mais nous les aborderons pas ici.]. 
+On réalise un premier modèle avec toutes les variables spécifiées, puis on regarde s'il est possible
+d'améliorer le modèle en supprimant une des variables du modèle. Si plusieurs variables permettent
+d'améliorer le modèle, on supprimera la variable dont la suppression améliorera le plus le modèle. Puis on
+recommence le même procédé pour voir si la suppression d'une seconde variable peut encore améliorer le
+modèle et ainsi de suite. Lorsque le modèle ne peut plus être améliorer par la suppresion d'une variable,
+on s'arrête.
+
+Il faut également définir un critère pour déterminer la qualité d'un modèle. L'un des plus utilisés est
+le <dfn lang="en">Akaike Information Criterion</dfn> ou <dfn>AIC</dfn>. 
+Plus l'AIC sera faible, meilleure sera le modèle.
+
+La fonction `step`{data-pkg="stats"} permet justement de sélectionner le meilleur modèle 
+par une procédure pas à pas descendante basée sur la minimisation de l'AIC. La fonction affiche à l'écran 
+les différentes étapes de la sélection et renvoie le modèle final.
+
+```{r}
+reg2 <- step(reg)
+```
+
+Le modèle initial a un AIC de 2235,9. À la première étape, il apparait que la suppression de la variable
+religion permet diminuer l'AIC à 2230,2. Lors de la seconde étape, toute suppression d'une autre variable
+ferait augmenter l'AIC. La procédure s'arrête donc.
+
+Pour obtenir directement l'AIC d'un modèle donné, on peut utiliser la fonction `AIC`{data-pkg="stats"}.
+
+```{r}
+AIC(reg)
+AIC(reg2)
+```
+
+On peut effectuer une <dfn>analyse de variance</dfn><dfn data-index="variance, analyse de"></dfn> ou <dfn lang="en">ANOVA</dfn> pour comparer les deux modèles avec la fonction `anova`{data-pkg="stats"}.
+
+```{r}
+anova(reg, reg2, test = "Chisq")
+```
+
+Il n'y a pas de différences significatives entre nos deux modèles. Autrement dit, notre second modèle explique tout autant de variance que notre premier modèle, tout en étant plus parcimonieux.
+
+<div class="note">
+Une alternative à la fonction `step`{data-pkg="stats"} est la fonction `stepAIC`{data-pkg="MASS"} de l'extension `MASS`{.pkg} qui fonctionne de la même manière. Si cela ne change rien aux régressions logistiques classiques, il arrive que pour certains types de modèle la méthode `step`{data-pkg="stats"} ne soit pas disponible, mais que `stepAIC`{data-pkg="MASS"} puisse être utilisée à la place.
+
+```{r}
+library(MASS)
+reg2bis <- stepAIC(reg)
+```
+</div>
+
+### Tableaux <q>all-in-one</q>
+
+L'extension `finalfit`{.pkg} fournit une fonction `finalfit`{data-pkg="finalfit"} du type <q lang="en">all-in-one</q> qui calcule un tableau avec les tris croisés, les odds ratios univariés et un modèle multivarié.
+
+Il faut d'abord définir la variable dépendante et les variables explicatives.
+
+```{r}
+dep <- "sport"
+vars <- c("sexe", "grpage", "etud", "relig", "heures.tv")
+```
+
+Une première fonction `summary_factorlist`{data-pkg="finalfit"} fournit un tableau descriptif avec, si l'option `p  = TRUE` est indiquée, des tests de comparaisons (ici des tests du Chi²).
+
+```{r}
+library(finalfit)
+tab <- summary_factorlist(d, dep, vars, p=TRUE, add_dependent_label=TRUE)
+tab
+```
+
+On peut remarquer que `finalfit`{.pkg} a tenu compte des étiquettes de variables définies plus haut avec `var_label`{data-pkg="labelled"} de l'extension `labelled`{.pkg} (voir le [chapitre sur les vecteurs labellisés](facteurs-et-vecteurs-labellises.html#les-etiquettes-de-variable)).
+
+On peut associer le résultat avec la fonction `kable`{data-pkg="knitr"} de `knitr`{.pkg} pour un rendu plus esthétique lorsque l'on produit un rapport **Rmarkdown** (voir le [chapitre dédié aux rapports automatisés](rmarkdown-les-rapports-automatises.html)).
+
+```{r}
+knitr::kable(tab, row.names = FALSE)
+```
+
+La fonction `finalfit`{data-pkg="finalfit"}, quant à elle, calcule à la fois les *odds ratios* univariés (modèles logistiques avec une seule variable inclue à la fois) et un modèle complet, présentant le tout dans un tableau synthétique.
+
+```{r, message = FALSE}
+tab <- finalfit(d, dep, vars)
+knitr::kable(tab, row.names = FALSE)
+```
+
+Par défaut, toutes les variables explicatives fournies sont retenues dans le modèle affiché. Si on ne souhaite inclure que certaines variables dans le modèle mutivarié (parce que l'on aura précédemment réalisé une procédure `step`{data-pkg="stats"}), il faudra préciser séparément les variables du modèle multivarié.
+
+
+```{r, message=FALSE}
+vars_multi <- c("sexe", "grpage", "etud", "heures.tv")
+tab <- finalfit(d, dep, vars, explanatory_multi =  vars_multi)
+knitr::kable(tab, row.names = FALSE)
+```
+
+On pourra se référer à l'aide de la fonction `finalfit`{data-pkg="finalfit"} pour d'autres exemples. 
+
+L'extension `finalfit`{.pkg} propose aussi une fonction `or_plot`{data-pkg="finalfilt"} pour présenter les odd ratios obtenus sous forme de graphique.
+
+<figure>
+```{r, fig.height=7, fig.width=12}
+var_label(d$heures.tv) <- "Nombre d'heures\nde TV par jour"
+or_plot(d, dep, vars_multi)
+```
+<figcaption>Graphique des odds ratios obtenu avec or_plot</figcaption>
+</figure>
+
+**ATTENTION :** `or_plot`{data-pkg="final_fit"} n'est pas compatible avec les effets d'interactions (cf. ci-dessous).
+
+### Effets d'interaction dans le modèle
+
+Voir le [chapitre dédié aux effets d'interaction](effets-d-interaction.html).
+
+### Multicolinéarité
+
+Voir le [chapitre dédié](multicolinearite.html).
+
+
+## Régression logistique multinomiale
+
+La <dfn>régression logistique multinomiale</dfn><dfn data-index="multinomiale, régression logistique"></dfn> est une extension de 
+la régression logistique aux variables qualitatives
+à trois modalités ou plus. Dans ce cas de figure, chaque modalité de la variable d'intérêt sera
+comparée à la modalité de réference. Les *odds ratio* seront donc exprimés par rapport à cette dernière.
+
+Nous allons prendre pour exemple la variable *trav.satisf*, à savoir la satisfaction ou l'insatisfaction
+au travail.
+
+```{r}
+freq(d$trav.satisf)
+```
+
+Nous allons choisir comme modalité de référence la position intermédiaire, à savoir l'« équilibre ».
+
+```{r}
+d$trav.satisf <- relevel(d$trav.satisf, "Equilibre")
+```
+
+Enfin, nous allons aussi en profiter pour raccourcir les étiquettes de la variable *trav.imp* :
+
+```{r}
+levels(d$trav.imp) <- c("Le plus", "Aussi", "Moins", "Peu")
+```
+
+Pour calculer un modèle logistique multinomial, nous allons utiliser la fonction `multinom`{data-pkg="nnet"} de l'extension
+`nnet`{.pkg}^[Une alternative est d'avoir recours à l'extension 
+`mlogit`{.pkg} que nous n'aborderons pas ici. Voir 
+<http://www.ats.ucla.edu/stat/r/dae/mlogit.htm> (en anglais) pour plus de détails.].
+La syntaxe de `multinom`{data-pkg="nnet"} est similaire à celle de `glm`{data-pkg="stats"}, 
+le paramètre `family` en moins.
+
+```{r}
+library(nnet)
+regm <- multinom(trav.satisf ~ sexe + etud + grpage + trav.imp, data = d)
+```
+
+Comme pour la régression logistique, il est possible de réaliser une sélection pas à pas descendante :
+
+```{r}
+regm2 <- step(regm)
+```
+
+La plupart des fonctions vues précédemment fonctionnent :
+
+```{r}
+summary(regm2)
+odds.ratio(regm2)
+```
+
+De même, il est possible de calculer la matrice de confusion :
+
+```{r}
+table(predict(regm2, newdata = d), d$trav.satisf)
+```
+
+La fonction `tidy`{data-pkg="broom"} peut s'appliquer au résultat de `multinom`{data-pkg="nnet"} :
+
+```{r}
+library(broom)
+tidy(regm2, exponentiate = TRUE, conf.int = TRUE)
+```
+
+On notera la présence d'une colonne supplémentaire, <var>y.level</var>. De fait, la fonction `ggcoef`{data-pkg="GGally"} ne peut s'appliquer directement, car les coefficients vont se supperposer.
+
+<figure>
+```{r}
+ggcoef(regm2, exponentiate = TRUE)
+```
+<figcaption>À ne pas faire : appliquer directment ggcoef</figcaption>
+</figure>
+
+On a deux solutions possibles. Pour la première, la plus simple, il suffit d'ajouter des facettes avec `facet_grid`{data-pkg="ggplot2"}.
+
+<figure>
+```{r}
+ggcoef(regm2, exponentiate = TRUE) + facet_grid(~y.level)
+```
+<figcaption>ggcoef avec facet_grid</figcaption>
+</figure>
+
+Pour la seconde, on va réaliser un graphique personnalisé, sur la même logique que `ggcoef`{data-pkg="GGally"}, décalant les points grâce à `position_dodge`{data-pkg="ggplot2"}.
+
+<figure>
+```{r}
+ggplot(tidy(regm2, exponentiate = T, conf.int = TRUE)) +
+  aes(x = term, y = estimate, ymin = conf.low, ymax = conf.high, color = y.level) +
+  geom_hline(yintercept = 1, color = "gray25", linetype = "dotted") +
+  geom_errorbar(position = position_dodge(0.5), width = 0) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  scale_y_log10() +
+  coord_flip()
+```
+<figcaption>Odds ratio d'un modèle multinomial</figcaption>
+</figure>
+
+
+## Régression logistique ordinale
+
+La <dfn>régression logistique ordinale</dfn><dfn data-index="ordinale, régression logistique"></dfn> s'applique lorsque la variable à expliquer possède trois ou plus modalités qui sont ordonnées (par exemple : modéré, moyen, fort). 
+
+L'extension la plus utilisée pour réaliser des modèles ordinaux est `ordinal`{.pkg} et sa fonction `clm`{data-pkg="ordinal"}. Il est même possible de réaliser des modèles ordinaux avec des [effets aléatoires](modeles-a-effets-aleatoires.html) (modèles mixtes) à l'aide de la fonction `clmm`{data-pkg="ordinal"}.
+
+Pour une bonne introduction à l'extension `ordinal`{.pkg}, on pourra se référer au tutoriel officiel (en anglais) : <https://cran.r-project.org/web/packages/ordinal/vignettes/clm_tutorial.pdf>.
+
+Une autre introduction pertinente (en français) et utilisant cette fois-ci l'extention `VGAM`{.pkg} et sa fonction `vglm`{data-pkg="VGAM"} est disponible sur le site de l'université de Lyon : <https://eric.univ-lyon2.fr/~ricco/cours/didacticiels/data-mining/didacticiel_Reg_Logistique_Polytomique_Ordinale.pdf>.
+
+On va reprendre l'exemple précédent puisque la variable <var>trav.satisf</var> est une variable ordonnée. 
+
+```{r}
+freq(d$trav.satisf)
+```
+
+
+**ATTENTION :** Dans le cas d'une régression logistique ordinale, il importante que les niveaux du facteur soient classés selon leur ordre hiéarchique (du plus faible au plus fort). On va dès lors recoder notre variable à expliquer.
+
+```{r}
+d$trav.satisf <- factor(d$trav.satisf, c("Insatisfaction", "Equilibre", "Satisfaction"), ordered = TRUE)
+freq(d$trav.satisf)
+```
+
+
+```{r}
+library(ordinal)
+rego <- clm(trav.satisf ~ sexe + etud + trav.imp, data = d)
+summary(rego)
+```
+
+Une fois encore, il est possible de faire une sélection descendane pas à pas.
+
+```{r, message=FALSE}
+rego2 <- step(rego)
+```
+
+L'extension `broom`{.pkg} ne propose pas de méthode `tidy`{data-pkg="broom"} pour les objets `clm`{data-pks="ordinal"}. Cependant, on pourra en trouver une dans l'extension `JLutils`{.pkg}. Pour rappel, cette extension est disponible uniquement sur [GitHub](https://github.com/larmarange/JLutils) et s'installe donc ainsi :
+
+```{r, eval=FALSE}
+install_github("larmarange/JLutils")
+```
+
+
+```{r}
+library(JLutils)
+tidy(rego2, exponentiate = TRUE, conf.int = TRUE)
+```
+
+La méthode `tidy.clm`{data-pkg="JLutils" data-rdoc="tidy_model"} étant disponible, on peut utiliser `ggcoef`{data-pkg="GGally"}.
+
+<figure>
+```{r}
+library(JLutils)
+library(GGally)
+ggcoef(rego2, exponentiate = TRUE)
+```
+<figcaption>Coefficients du modèle ordinal</figcaption>
+</figure>
+
+## Données pondérées et l'extension survey{#survey}
+
+Lorsque l'on utilise des données pondérées, on aura recours à l'extension `survey`{.pkg}^[Voir le chapitre dédié aux [données pondérées](donnees-ponderees.html#survey).].
+
+Préparons des données d'exemple :
+
+```{r, message=FALSE}
+library(survey)
+dw <- svydesign(ids = ~1, data = d, weights = ~poids)
+```
+
+
+### Régression logistique binaire
+
+L'extension `survey`{.pkg} fournit une fonction `svyglm`{data-pkg="survey"}
+permettant de calculer un modèle statistique tout en prenant
+en compte le plan d'échantillonnage spécifié. La syntaxe de `svyglm`{data-pkg="survey"} est proche
+de celle de `glm`{data-pkg="stats"}. Cependant, le cadre d'une régression logistique,
+il est nécessaire d'utiliser `family = quasibinomial()` afin d'éviter un message d'erreur
+indiquant un nombre non entier de succès :
+
+```{r}
+reg <- svyglm(sport ~ sexe + age + relig + heures.tv, dw, family = binomial())
+reg <- svyglm(sport ~ sexe + age + relig + heures.tv, dw, family = quasibinomial())
+reg
+```
+
+Le résultat obtenu est similaire à celui de `glm`{data-pkg="stats"} et l'on peut utiliser 
+sans problème les fonctions `coef`{data-pkg="survey" data-rdoc="svyglm"},
+`confint`{data-pkg="survey" data-rdoc="confint.glm"}, 
+`odds.ratio`{data-pkg="questionr"}, `predict`{data-pkg="survey" data-rdoc="svyglm"} ou encore `tidy`{data-pkg="broom" data-rdoc="glm_tidiers"}.
+
+```{r}
+odds.ratio(reg)
+```
+
+
+```{r}
+library(broom)
+tidy(reg, exponentiate = TRUE, conf.int = TRUE)
+```
+
+
+Dans ses dernières versions, `survey`{.pkg} fournit une méthode 
+`AIC.svyglm`{data-pkg="survey" data-rdoc="anova.svyglm"} permettant d'estimer un <dfn>AIC</dfn>
+sur un modèle calculé avec `svyglm`{data-pkg="survey"}. Il est dès lors possible d'utiliser 
+la fonction `step`{data-pkg="stats"} pour réaliser une 
+<dfn>sélection descendante pas à pas</dfn><dfn data-index="pas à pas, sélection descendante"></dfn>.
+
+L'extension `effects`{.pkg} n'est quant à elle pas compatible avec
+`svyglm`{data-pkg="survey"}^[Compatibilité qui pourra éventuellement être introduite dans une future version de l'extension.].
+
+### Régression multinomiale
+
+L'extension `survey`{.pkg} ne fournit pas de fonction adaptée aux régressions multinomiales. Cependant, il est possible d'en réaliser une en ayant recours à des <dfn>poids de réplication</dfn><dfn data-index="réplication, poids"></dfn>, comme suggéré par Thomas Lumley dans son ouvrage *Complex Surveys: A Guide to Analysis Using R*. Thomas Lumley est par ailleurs l'auteur de l'extension `survey`{.pkg}.
+
+L'extension `svrepmisc`{.pkg} disponible sur [GitHub](https://github.com/carlganz/svrepmisc) fournit quelques fonctions facilitant l'utilisation des poids de réplication avec `survey`{.pkg}. Pour l'installer, on utilisera le code ci-dessous :
+
+```{r, eval=FALSE}
+devtools::install_github("carlganz/svrepmisc")
+```
+
+En premier lieu, il faut définir le design de notre tableau de données puis calculer des poids de réplication.
+
+```{r}
+library(survey)
+dw <- svydesign(ids = ~1, data = d, weights = ~poids)
+dwr <- as.svrepdesign(dw, type = "bootstrap", replicates = 100)
+```
+
+Il faut prévoir un nombre de `replicates` suffisant pour calculer ultérieurement les intervalles de confiance des coefficients. Plus ce nombre est élevé, plus précise sera l'estimation de la variance et donc des valeurs p et des intervalles de confiance. Cependant, plus ce nombre est élevé, plus le temps de calcul sera important.
+
+`svrepmisc`{.pkg} fournit une fonction `svymultinom`{data-pkg="svrepmisc"} pour le calcul d'une régression multinomiale avec des poids de réplication.
+
+```{r, results="hide"}
+library(svrepmisc)
+regm <- svymultinom(trav.satisf ~ sexe + etud + grpage + trav.imp, design = dwr)
+```
+
+`svrepmisc`{.pkg} fournit également des méthodes `confint`{data-pkg="svrepmisc" data-rdoc="svymultinom"} et `tidy`{data-pkg="svrepmisc" data-rdoc="tidy.svrepstatmisc"}. Il est également possible d'utiliser `ggcoef`{data-pkg="GGally"}.
+
+```{r}
+regm
+confint(regm)
+library(broom)
+tidy(regm, exponentiate = TRUE, conf.int = TRUE)
+```
+
+
+
+### Régression ordinale
+
+Pour un modèle ordinal, il existe une version simplifiée des modèles ordinaux directement disponible dans `survey`{.pkg} via la fonction `svyolr`{data-pkg="survey"}.
+
+```{r}
+rego <- svyolr(trav.satisf ~ sexe + etud + trav.imp, design = dw)
+summary(rego)
+confint(rego)
+```
+
+L'extension `JLutils`{.pkg}^[`devtools::install_github("larmarange/JLutils")` pour l'installer] propose une méthode `tidy`{data-pkg="JLutils" data-rdoc="tidy_model"} pour les objets `svyolr.`
+
+```{r}
+library(JLutils)
+library(broom)
+tidy(rego, exponentiate = TRUE, conf.int = TRUE)
+```
+
+
+Une alternative est d'avoir recours, comme pour la régression multinomiale, aux poids de réplication et à la fonction `svyclm`{data-pkg="svrepmisc"} implémentée dans l'extension `svrepmisc`{.pkg}.
+
+```{r}
+dwr <- as.svrepdesign(dw, type = "bootstrap", replicates = 100)
+library(svrepmisc)
+rego_alt <- svyclm(trav.satisf ~ sexe + etud + trav.imp, design = dwr)
+rego_alt
+confint(rego_alt)
+tidy(rego_alt, exponentiate = TRUE, conf.int = TRUE)
+```
+
+

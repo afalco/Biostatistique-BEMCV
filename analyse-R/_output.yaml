@@ -1,0 +1,16 @@
+html_document:
+  self_contained: false
+  theme: paper
+  highlight: pygments
+  mathjax: null
+  toc: true
+  df_print: paged
+  lib_dir: libs
+  lang: fr
+  pandoc_args: [
+      "--metadata", "lang:fr", "--columns=1000",
+    ]
+  includes:
+    in_header: include/in_header.html
+    before_body: include/before_body.html
+    after_body: include/after_body.html

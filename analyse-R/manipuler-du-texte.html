@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Manipuler du texte avec stringr</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="./include/analyse-R.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script type="text/javascript" src="./libs/bigfoot-2.1.4/bigfoot.min.js"></script>
+<link rel="stylesheet" href="./libs/bigfoot-2.1.4/bigfoot-number.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<link rel="stylesheet" href="./libs/colorbox-1.6.1/colorbox.css" />
+<script type="text/javascript" src="./libs/colorbox-1.6.1/jquery.colorbox-min.js"></script>
+<!--- favicon --->
+<link rel="apple-touch-icon" sizes="57x57" href="./images/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="./images/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="./images/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="./images/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="./images/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="./images/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="./images/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="./images/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="./images/favicon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./images/favicon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
+<link rel="manifest" href="./images/favicon/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="./images/favicon/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-121727005-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-121727005-1');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+<nav>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href=".">analyse-R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="manipuler" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manipuler <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_manipuler">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Prise en main</li>
+                  <li><a href="presentation-et-philosophie.html">Présentation et Philosophie</a></li>
+                  <li><a href="installation-de-R-et-RStudio.html">Installation de <strong>R</strong> et <strong>RStudio</strong></a></li>
+                  <li><a href="premier-contact.html">Premier contact</a></li>
+                  <li><a href="premier-travail-avec-les-donnees.html">Premier travail avec des données</a></li>
+                  <li><a href="extensions.html">Extensions (installation, mise à jour)</a></li>
+                  <li><a href="introduction-au-tidyverse.html">Introduction au <strong>tidyverse</strong></a></li>
+                  <li><a href="vecteurs-indexation-et-assignation.html">Vecteurs, indexation et assignation</a></li>
+                  <li><a href="listes-et-tableaux-de-donnes.html">Listes et Tableaux de données</a></li>
+                  <li><a href="facteurs-et-vecteurs-labellises.html">Facteurs et vecteurs labellisés</a></li>
+                  <li><a href="organiser-ses-fichiers.html">Organiser ses fichiers</a></li>
+                  <li><a href="import-de-donnees.html">Import de données</a></li>
+                  <li><a href="ou-trouver-de-l-aide.html">Où trouver de l'aide ?</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Manipulation de données</li>
+  		            <li><a href="visualiser-ses-donnees.html">Visualiser ses données</a></li>
+  		            <li><a href="recodage.html">Recodage de variables</a></li>
+                  <li><a href="manipuler-les-donnees-avec-dplyr.html">Manipuler les données avec <strong>dplyr</strong></a></li>
+                  <li><a href="manipulations-avancees-avec-data-table.html">Manipulations avancées avec <strong>data.table</strong></a></li>
+                  <li><a href="tris.html">Tris</a></li>
+                  <li><a href="sous-ensembles.html">Sous-ensembles</a></li>
+                  <li><a href="fusion-de-tables.html">Fusion de tables</a></li>
+                  <li><a href="gestion-des-dates.html">Gestion des dates</a></li>
+                  <li><a href="fonctions-a-fenetre.html">Fonctions à fenêtre</a></li>
+                  <li><a href="manipuler-du-texte.html">Manipuler du texte avec <strong>stringr</strong></a></li>
+                  <li><a href="reorganiser-ses-donnees-avec-tidyr.html">Réorganiser ses données avec <strong>tidyr</strong></a></li>
+                  <li><a href="scraping.html">Scraping</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Exporter</li>
+                  <li><a href="export-de-donnees.html">Export de données</a></li>
+                  <li><a href="export-de-graphiques.html">Export de graphiques</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="analyser" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Analyser <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_analyser">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Statistiques introductives</li>
+                  <li><a href="statistique-univariee.html">Statistique univariée</a></li>
+                  <li><a href="statistique-bivariee.html">Statistique bivariée</a></li>
+                  <li><a href="intro-ggplot2.html">Introduction à <strong>ggplot2</strong>, la grammaire des graphiques</a></li>
+                  <li><a href="graphiques-bivaries-ggplot2.html">Graphiques univariés et bivariés avec <strong>ggplot2</strong></a></li>
+                  <li><a href="donnees-ponderees.html">Données pondérées</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Statistiques intermédiaires</li>
+  		            <li><a href="intervalles-de-confiance.html">Intervalles de confiance</a></li>
+                  <li><a href="comparaisons-moyennes-et-proportions.html">Comparaisons (moyennes et proportions)</a></li>
+                  <li><a href="definir-un-plan-d-echantillonnage-complexe.html">Définir un plan d'échantillonnage complexe</a></li>
+                  <li><a href="regression-lineaire.html">Régression linéaire</a></li>
+                  <li><a href="regression-logistique.html">Régression logistique binaire, multinomiale et ordinale</a></li>
+                  <li><a href="analyse-des-correspondances-multiples.html">Analyse des correspondances multiples (ACM)</a></li>
+                  <li><a href="classification-ascendante-hierarchique.html">Classification ascendante hiérarchique (CAH)</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Statistiques avancées</li>
+                  <li><a href="effets-d-interaction.html">Effets d'interaction dans un modèle</a></li>
+                  <li><a href="multicolinearite.html">Multicolinéarité dans la régression</a></li>
+                  <li><a href="analyse-de-survie.html">Analyse de survie</a></li>
+                  <li><a href="analyse-de-sequences.html">Analyse de séquences</a></li>
+                  <!--<li><a href="modeles-a-effets-aleatoires.html">Modèles à effets aléatoires (modèles mixtes et GEE)</a></li>-->
+                  <li><a href="trajectoires-de-soins.html">Trajectoires de soins&nbsp;: un exemple de données longitudinales</a></li>
+                  <li><a href="analyse-de-reseaux.html">Analyse de réseaux</a></li>
+                  <li><a href="analyse-spatiale.html">Analyse spatiale</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="approfondir" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Approfondir <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_approfondir">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Graphiques</li>
+                  <li><a href="ggplot2.html"><strong>ggplot2</strong> et la grammaire des graphiques</a></li>
+                  <li><a href="etendre-ggplot2.html">Étendre ggplot2</a></li>
+                  <li><a href="combiner-plusieurs-graphiques.html">Combiner plusieurs graphiques</a></li>
+                  <li><a href="graphiques-interactifs.html">Graphiques interactifs</a></li>
+                  <li><a href="lattice-graphiques-et-formules.html"><strong>lattice</strong> : graphiques et formules</a></li>
+                  <li><a href="cartes.html">Cartes</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Programmation</li>
+  		            <li><a href="conditions-et-comparaisons.html">Conditions et comparaisons</a></li>
+                  <li><a href="formules.html">Formules</a></li>
+                  <li><a href="structures-conditionnelles.html">Structures conditionnelles</a></li>
+                  <li><a href="vectorisation.html">Vectorisation</a></li>
+                  <li><a href="expressions-regulieres.html">Expressions régulières</a></li>
+                  <!--<li class="dev"><a href="ecrire-ses-propres-fonctions.html">Écrire ses propres fonctions</a></li>-->
+                  <li><a href="rmarkdown-les-rapports-automatises.html"><strong>R Markdown</strong> : les rapports automatisés</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Divers</li>
+                  <li><a href="formater-nombres.html">Mettre en forme des nombres</a></li>
+                  <li><a href="couleurs.html">Couleurs et Palettes</a></li>
+                  <li><a href="annotations-mathematiques.html">Annotations mathématiques</a></li>
+                  <li><a href="calculer-un-age.html">Calculer un âge</a></li>
+                  <li><a href="diagramme-de-lexis.html">Diagramme de Lexis</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="index" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Index <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" id="menu_naviguer">
+            <li><a href="index-des-concepts.html">Index des concepts</a></li>
+            <li><a href="index-des-fonctions.html">Index des fonctions</a></li>
+            <li><a href="index-des-extensions.html">Index des extensions</a></li>
+          </ul>
+        </li>
+        <li><a href="analyse-R.pdf">PDF</a></li>
+        <!--<li><a href="https://github.com/larmarange/analyse-R">GitHub</a></li>-->
+      </ul>
+    <form id="rechercher" class="navbar-form navbar-right" role="search" style="padding-top: 5px;" method="get" action="https://duckduckgo.com/">
+      <div class="form-group">
+        <input name="q" type="text" class="form-control input-sm" placeholder="Rechercher">
+      </div>
+      <button type="submit" class="btn btn-default btn-sm" name="Rechercher">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </button>
+    </form>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+</nav>
+
+<div class="row">
+
+<div class="visible-lg">
+<a href="https://github.com/larmarange/analyse-R"><img style="position: absolute; top: 60px; left: 40px; border: 0;" src="./images/fork_me.png" alt="Contribuer sur GitHub"></a>
+</div>
+
+<div class="col-sm-9" role="main">
+<article>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Manipuler du texte avec stringr</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#expressions-regulieres">Expressions régulières</a></li>
+<li><a href="#concatener-des-chaines">Concaténer des chaînes</a></li>
+<li><a href="#convertir-en-majuscules-minuscules">Convertir en majuscules / minuscules</a></li>
+<li><a href="#decouper-des-chaines">Découper des chaînes</a></li>
+<li><a href="#extraire-des-sous-chaines-par-position">Extraire des sous-chaînes par position</a></li>
+<li><a href="#str_detect">Détecter des motifs</a></li>
+<li><a href="#extraire-des-motifs">Extraire des motifs</a></li>
+<li><a href="#remplacer-des-motifs">Remplacer des motifs</a></li>
+<li><a href="#modificateurs">Modificateurs de motifs</a></li>
+<li><a href="#inserer-une-variable-dans-une-chaine-de-caracteres">Insérer une variable dans une chaîne de caractères</a></li>
+<li><a href="#ressources">Ressources</a></li>
+</ul>
+</div>
+
+<div class="note">
+<p>La version originale de ce chapitre a été écrite par Julien Barnier dans le cadre de son <a href="https://juba.github.io/tidyverse/11-stringr.html">Introduction à R et au <em>tidyverse</em></a>.</p>
+</div>
+<p>Les fonctions de <code class="pkg">forcats</code> vues précédemment permettent de modifier des modalités d’une variables qualitative globalement. Mais parfois on a besoin de manipuler le contenu même du texte d’une variable de type chaîne de caractères : combiner, rechercher, remplacer…</p>
+<p>On va utiliser ici les fonctions de l’extension <code class="pkg">stringr</code>. Celle-ci fait partie du coeur du <strong>tidyverse</strong>, elle est donc automatiquement chargée avec :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="note">
+<p><code class="pkg">stringr</code> est en fait une interface simplifiée aux fonctions d’une autre extension, <code class="pkg">stringi</code>. Si les fonctions de <code class="pkg">stringr</code> ne sont pas suffisantes ou si on manipule beaucoup de chaînes de caractères, ne pas hésiter à se reporter à la documentation de <code class="pkg">stringi</code>.</p>
+</div>
+<p>Dans ce qui suit on va utiliser le court tableau d’exemple <code>d</code> suivant :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">nom =</span> <span class="kw">c</span>(<span class="st">&quot;Mr Félicien Machin&quot;</span>, <span class="st">&quot;Mme Raymonde Bidule&quot;</span>, </a>
+<a class="sourceLine" id="cb2-2" title="2">  <span class="st">&quot;M. Martial Truc&quot;</span>, <span class="st">&quot;Mme Huguette Chose&quot;</span>), <span class="dt">adresse =</span> <span class="kw">c</span>(<span class="st">&quot;3 rue des Fleurs&quot;</span>, </a>
+<a class="sourceLine" id="cb2-3" title="3">  <span class="st">&quot;47 ave de la Libération&quot;</span>, <span class="st">&quot;12 rue du 17 octobre 1961&quot;</span>, <span class="st">&quot;221 avenue de la Libération&quot;</span>), </a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="dt">ville =</span> <span class="kw">c</span>(<span class="st">&quot;Nouméa&quot;</span>, <span class="st">&quot;Marseille&quot;</span>, <span class="st">&quot;Vénissieux&quot;</span>, <span class="st">&quot;Marseille&quot;</span>))</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">nom</th>
+<th align="left">adresse</th>
+<th align="left">ville</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mr Félicien Machin</td>
+<td align="left">3 rue des Fleurs</td>
+<td align="left">Nouméa</td>
+</tr>
+<tr class="even">
+<td align="left">Mme Raymonde Bidule</td>
+<td align="left">47 ave de la Libération</td>
+<td align="left">Marseille</td>
+</tr>
+<tr class="odd">
+<td align="left">M. Martial Truc</td>
+<td align="left">12 rue du 17 octobre 1961</td>
+<td align="left">Vénissieux</td>
+</tr>
+<tr class="even">
+<td align="left">Mme Huguette Chose</td>
+<td align="left">221 avenue de la Libération</td>
+<td align="left">Marseille</td>
+</tr>
+</tbody>
+</table>
+<div id="expressions-regulieres" class="section level2">
+<h2>Expressions régulières</h2>
+<p>Les fonctions présentées ci-dessous sont pour la plupart prévues pour fonctionner avec des <dfn data-index="expression régulière">expressions régulières</dfn><dfn data-index="régulière, expression"></dfn>. Celles-ci constituent un mini-langage, qui peut paraître assez cryptique, mais qui est très puissant pour spécifier des motifs de chaînes de caractères.</p>
+<p>Elles permettent par exemple de sélectionner le dernier mot avant la fin d’une chaîne, l’ensemble des suites alphanumériques commençant par une majuscule, des nombres de 3 ou 4 chiffres situés en début de chaîne, et beaucoup beaucoup d’autres choses encore bien plus complexes.</p>
+<p>Pour donner un exemple concret, l’expression régulière suivante permet de détecter une adresse de courrier électronique<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> :</p>
+<p><code>[\w\d+.-_]+@[\w\d.-]+\.[a-zA-Z]{2,}</code></p>
+<p>Par souci de simplicité, dans ce qui suit les exemples seront donnés autant que possible avec de simples chaînes, sans expression régulière. Mais si vous pensez manipuler des données textuelles, il peut être très utile de s’intéresser à cette syntaxe.</p>
+</div>
+<div id="concatener-des-chaines" class="section level2">
+<h2>Concaténer des chaînes</h2>
+<p>La première opération de base consiste à concaténer des chaînes de caractères entre elles. On peut le faire avec la fonction <code data-pkg="base">paste</code>.</p>
+<p>Par exemple, si on veut concaténer l’adresse et la ville :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">paste</span>(d<span class="op">$</span>adresse, d<span class="op">$</span>ville)</a></code></pre></div>
+<pre><code>[1] &quot;3 rue des Fleurs Nouméa&quot;              
+[2] &quot;47 ave de la Libération Marseille&quot;    
+[3] &quot;12 rue du 17 octobre 1961 Vénissieux&quot; 
+[4] &quot;221 avenue de la Libération Marseille&quot;</code></pre>
+<p>Par défaut, <code data-pkg="base">paste</code> concatène en ajoutant un espace entre les différentes chaînes. On peut spécifier un autre séparateur avec son argument <code>sep</code> :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">paste</span>(d<span class="op">$</span>adresse, d<span class="op">$</span>ville, <span class="dt">sep =</span> <span class="st">&quot; - &quot;</span>)</a></code></pre></div>
+<pre><code>[1] &quot;3 rue des Fleurs - Nouméa&quot;              
+[2] &quot;47 ave de la Libération - Marseille&quot;    
+[3] &quot;12 rue du 17 octobre 1961 - Vénissieux&quot; 
+[4] &quot;221 avenue de la Libération - Marseille&quot;</code></pre>
+<p>Il existe une variante, <code data-pkg="base" data-rdoc="paste">paste0</code>, qui concatène sans mettre de séparateur, et qui est légèrement plus rapide :</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">paste0</span>(d<span class="op">$</span>adresse, d<span class="op">$</span>ville)</a></code></pre></div>
+<pre><code>[1] &quot;3 rue des FleursNouméa&quot;              
+[2] &quot;47 ave de la LibérationMarseille&quot;    
+[3] &quot;12 rue du 17 octobre 1961Vénissieux&quot; 
+[4] &quot;221 avenue de la LibérationMarseille&quot;</code></pre>
+<div class="note">
+<p>À noter que <code data-pkg="base">paste</code> et <code data-pkg="base" data-rdoc="paste">paste0</code> sont des fonctions R de base. L’équivalent pour <code class="pkg">stringr</code> se nomme <code data-pkg="stringr">str_c</code>.</p>
+</div>
+<p>Parfois on cherche à concaténer les différents éléments d’un vecteur non pas avec ceux d’un autre vecteur, comme on l’a fait précédemment, mais <em>entre eux</em>. Dans ce cas <code data-pkg="base">paste</code> seule ne fera rien :</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">paste</span>(d<span class="op">$</span>ville)</a></code></pre></div>
+<pre><code>[1] &quot;Nouméa&quot;     &quot;Marseille&quot;  &quot;Vénissieux&quot; &quot;Marseille&quot; </code></pre>
+<p>Il faut lui ajouter un argument <code>collapse</code>, avec comme valeur la chaîne à utiliser pour concaténer les éléments :</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">paste</span>(d<span class="op">$</span>ville, <span class="dt">collapse =</span> <span class="st">&quot;, &quot;</span>)</a></code></pre></div>
+<pre><code>[1] &quot;Nouméa, Marseille, Vénissieux, Marseille&quot;</code></pre>
+</div>
+<div id="convertir-en-majuscules-minuscules" class="section level2">
+<h2>Convertir en majuscules / minuscules</h2>
+<p>Les fonctions <code data-pkg="stringr" data-rdoc="case">str_to_lower</code>, <code data-pkg="stringr" data-rdoc="case">str_to_upper</code> et <code data-pkg="stringr" data-rdoc="case">str_to_title</code> permettent respectivement de mettre en minuscules, mettre en majuscules, ou de capitaliser les éléments d’un vecteur de chaînes de caractères :</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">str_to_lower</span>(d<span class="op">$</span>nom)</a></code></pre></div>
+<pre><code>[1] &quot;mr félicien machin&quot;  &quot;mme raymonde bidule&quot;
+[3] &quot;m. martial truc&quot;     &quot;mme huguette chose&quot; </code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">str_to_upper</span>(d<span class="op">$</span>nom)</a></code></pre></div>
+<pre><code>[1] &quot;MR FÉLICIEN MACHIN&quot;  &quot;MME RAYMONDE BIDULE&quot;
+[3] &quot;M. MARTIAL TRUC&quot;     &quot;MME HUGUETTE CHOSE&quot; </code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">str_to_title</span>(d<span class="op">$</span>nom)</a></code></pre></div>
+<pre><code>[1] &quot;Mr Félicien Machin&quot;  &quot;Mme Raymonde Bidule&quot;
+[3] &quot;M. Martial Truc&quot;     &quot;Mme Huguette Chose&quot; </code></pre>
+</div>
+<div id="decouper-des-chaines" class="section level2">
+<h2>Découper des chaînes</h2>
+<p>La fonction <code data-pkg="stringr">str_split</code> permet de “découper” une chaîne de caractère en fonction d’un délimiteur. On passe la chaîne en premier argument, et le délimiteur en second :</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">str_split</span>(<span class="st">&quot;un-deux-trois&quot;</span>, <span class="st">&quot;-&quot;</span>)</a></code></pre></div>
+<pre><code>[[1]]
+[1] &quot;un&quot;    &quot;deux&quot;  &quot;trois&quot;</code></pre>
+<p>On peut appliquer la fonction à un vecteur, dans ce cas le résultat sera une liste :</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">str_split</span>(d<span class="op">$</span>nom, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<pre><code>[[1]]
+[1] &quot;Mr&quot;       &quot;Félicien&quot; &quot;Machin&quot;  
+
+[[2]]
+[1] &quot;Mme&quot;      &quot;Raymonde&quot; &quot;Bidule&quot;  
+
+[[3]]
+[1] &quot;M.&quot;      &quot;Martial&quot; &quot;Truc&quot;   
+
+[[4]]
+[1] &quot;Mme&quot;      &quot;Huguette&quot; &quot;Chose&quot;   </code></pre>
+<p>Ou un tableau (plus précisément une matrice) si on ajoute <code>simplify = TRUE</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">str_split</span>(d<span class="op">$</span>nom, <span class="st">&quot; &quot;</span>, <span class="dt">simplify =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>     [,1]  [,2]       [,3]    
+[1,] &quot;Mr&quot;  &quot;Félicien&quot; &quot;Machin&quot;
+[2,] &quot;Mme&quot; &quot;Raymonde&quot; &quot;Bidule&quot;
+[3,] &quot;M.&quot;  &quot;Martial&quot;  &quot;Truc&quot;  
+[4,] &quot;Mme&quot; &quot;Huguette&quot; &quot;Chose&quot; </code></pre>
+<p>Si on souhaite créer de nouvelles colonnes dans un tableau de données en découpant une colonne de type texte, on pourra utiliser la fonction <code data-pkg="tidyr">separate</code> de l’extension <code class="pkg">tidyr</code>. Celle-ci est expliquée section @ref(separate).</p>
+<p>Voici juste un exemple de son utilisation :</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb25-2" title="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">separate</span>(nom, <span class="kw">c</span>(<span class="st">&quot;genre&quot;</span>, <span class="st">&quot;prenom&quot;</span>, <span class="st">&quot;nom&quot;</span>))</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["genre"],"name":[1],"type":["chr"],"align":["left"]},{"label":["prenom"],"name":[2],"type":["chr"],"align":["left"]},{"label":["nom"],"name":[3],"type":["chr"],"align":["left"]},{"label":["adresse"],"name":[4],"type":["chr"],"align":["left"]},{"label":["ville"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"Mr","2":"Félicien","3":"Machin","4":"3 rue des Fleurs","5":"Nouméa"},{"1":"Mme","2":"Raymonde","3":"Bidule","4":"47 ave de la Libération","5":"Marseille"},{"1":"M","2":"Martial","3":"Truc","4":"12 rue du 17 octobre 1961","5":"Vénissieux"},{"1":"Mme","2":"Huguette","3":"Chose","4":"221 avenue de la Libération","5":"Marseille"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="extraire-des-sous-chaines-par-position" class="section level2">
+<h2>Extraire des sous-chaînes par position</h2>
+<p>La fonction <code data-pkg="stringr">str_sub</code> permet d’extraire des sous-chaînes par position, en indiquant simplement les positions des premier et dernier caractères :</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">str_sub</span>(d<span class="op">$</span>ville, <span class="dv">1</span>, <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>[1] &quot;Nou&quot; &quot;Mar&quot; &quot;Vén&quot; &quot;Mar&quot;</code></pre>
+</div>
+<div id="str_detect" class="section level2">
+<h2>Détecter des motifs</h2>
+<p><code data-pkg="stringr">str_detect</code> permet de détecter la présence d’un motif parmi les élements d’un vecteur. Par exemple, si on souhaite identifier toutes les adresses contenant <q>Libération</q> :</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">str_detect</span>(d<span class="op">$</span>adresse, <span class="st">&quot;Libération&quot;</span>)</a></code></pre></div>
+<pre><code>[1] FALSE  TRUE FALSE  TRUE</code></pre>
+<p><code data-pkg="stringr">str_detect</code> renvoit un vecteur de valeurs logiques et peut donc être utilisée, par exemple, avec le verbe <code data-pkg="dplyr">filter</code> de <code class="pkg">dplyr</code> pour extraire des sous-populations.</p>
+<p>Une variante, <code data-pkg="stringr">str_count</code>, compte le nombre d’occurrences d’une chaîne pour chaque élément d’un vecteur :</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">str_count</span>(d<span class="op">$</span>ville, <span class="st">&quot;s&quot;</span>)</a></code></pre></div>
+<pre><code>[1] 0 1 2 1</code></pre>
+<div class="important">
+<p>Attention, les fonctions de <code class="pkg">stringr</code> étant prévues pour fonctionner avec des expressions régulières, certains caractères n’auront pas le sens habituel dans la chaîne indiquant le motif à rechercher. Par exemple, le <code>.</code> ne sera pas un point mais le symbole représentant <q>n’importe quel caractère</q>.</p>
+<p>La section sur les modificateurs de motifs explique comment utiliser des chaîne <q>classiques</q> au lieu d’expressions régulières.</p>
+</div>
+<p>On peut aussi utiliser <code data-pkg="stringr">str_subset</code> pour ne garder d’un vecteur que les éléments correspondant au motif :</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">str_subset</span>(d<span class="op">$</span>adresse, <span class="st">&quot;Libération&quot;</span>)</a></code></pre></div>
+<pre><code>[1] &quot;47 ave de la Libération&quot;    
+[2] &quot;221 avenue de la Libération&quot;</code></pre>
+</div>
+<div id="extraire-des-motifs" class="section level2">
+<h2>Extraire des motifs</h2>
+<p><code data-pkg="stringr">str_extract</code> permet d’extraire les valeurs correspondant à un motif. Si on lui passe comme motif une chaîne de caractère, cela aura peu d’intérêt :</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">str_extract</span>(d<span class="op">$</span>adresse, <span class="st">&quot;Libération&quot;</span>)</a></code></pre></div>
+<pre><code>[1] NA           &quot;Libération&quot; NA           &quot;Libération&quot;</code></pre>
+<p>C’est tout de suite plus intéressant si on utilise des expressions régulières. Par exemple la commande suivante permet d’isoler les numéros de rue.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">str_extract</span>(d<span class="op">$</span>adresse, <span class="st">&quot;^</span><span class="ch">\\</span><span class="st">d+&quot;</span>)</a></code></pre></div>
+<pre><code>[1] &quot;3&quot;   &quot;47&quot;  &quot;12&quot;  &quot;221&quot;</code></pre>
+<p><code data-pkg="stringr">str_extract</code> ne récupère que la première occurrence du motif. Si on veut toutes les extraire on peut utiliser <code data-pkg="stringr" data-rdoc="str_extract">str_extract_all</code>. Ainsi, si on veut extraire l’ensemble des nombres présents dans les adresses :</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">str_extract_all</span>(d<span class="op">$</span>adresse, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)</a></code></pre></div>
+<pre><code>[[1]]
+[1] &quot;3&quot;
+
+[[2]]
+[1] &quot;47&quot;
+
+[[3]]
+[1] &quot;12&quot;   &quot;17&quot;   &quot;1961&quot;
+
+[[4]]
+[1] &quot;221&quot;</code></pre>
+<div class="note">
+<p>Si on veut faire de l’extraction de groupes dans des expressions régulières (identifiés avec des parenthèses), on pourra utiliser <code>str_match</code>.</p>
+</div>
+<p>À noter que si on souhaite extraire des valeurs d’une colonne texte d’un tableau de données pour créer de nouvelles variables, on pourra utiliser la fonction <code data-pkg="tidyr">extract</code> de l’extension <code class="pkg">tidyr</code>, décrite plus haut.</p>
+<p>Par exemple :</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb40-2" title="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">extract</span>(adresse, <span class="st">&quot;type_rue&quot;</span>, <span class="st">&quot;^</span><span class="ch">\\</span><span class="st">d+ (.*?) &quot;</span>, <span class="dt">remove =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["nom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["adresse"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type_rue"],"name":[3],"type":["chr"],"align":["left"]},{"label":["ville"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"Mr Félicien Machin","2":"3 rue des Fleurs","3":"rue","4":"Nouméa"},{"1":"Mme Raymonde Bidule","2":"47 ave de la Libération","3":"ave","4":"Marseille"},{"1":"M. Martial Truc","2":"12 rue du 17 octobre 1961","3":"rue","4":"Vénissieux"},{"1":"Mme Huguette Chose","2":"221 avenue de la Libération","3":"avenue","4":"Marseille"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="remplacer-des-motifs" class="section level2">
+<h2>Remplacer des motifs</h2>
+<p>La fonction <code data-pkg="stringr">str_replace</code> permet de remplacer une chaîne ou un motif par une autre.</p>
+<p>Par exemple, on peut remplace les occurrence de “Mr” par “M.” dans les noms de notre tableau :</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">str_replace</span>(d<span class="op">$</span>nom, <span class="st">&quot;Mr&quot;</span>, <span class="st">&quot;M.&quot;</span>)</a></code></pre></div>
+<pre><code>[1] &quot;M. Félicien Machin&quot;  &quot;Mme Raymonde Bidule&quot;
+[3] &quot;M. Martial Truc&quot;     &quot;Mme Huguette Chose&quot; </code></pre>
+<p>La variante <code data-pkg="stringr" data-rdoc="str_replace">str_replace_all</code> permet de spécifier plusieurs remplacements d’un coup :</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">str_replace_all</span>(d<span class="op">$</span>adresse, <span class="kw">c</span>(<span class="dt">avenue =</span> <span class="st">&quot;Avenue&quot;</span>, <span class="dt">ave =</span> <span class="st">&quot;Avenue&quot;</span>, </a>
+<a class="sourceLine" id="cb43-2" title="2">  <span class="dt">rue =</span> <span class="st">&quot;Rue&quot;</span>))</a></code></pre></div>
+<pre><code>[1] &quot;3 Rue des Fleurs&quot;           
+[2] &quot;47 Avenue de la Libération&quot; 
+[3] &quot;12 Rue du 17 octobre 1961&quot;  
+[4] &quot;221 Avenue de la Libération&quot;</code></pre>
+</div>
+<div id="modificateurs" class="section level2">
+<h2>Modificateurs de motifs</h2>
+<p>Par défaut, les motifs passés aux fonctions comme <code data-pkg="stringr">str_detect</code>, <code data-pkg="stringr">str_extract</code> ou <code data-pkg="stringr">str_replace</code> sont des expressions régulières classiques.</p>
+<p>On peut spécifier qu’un motif n’est pas une expression régulière mais une chaîne de caractères normale en lui appliquant la fonction <code data-pkg="stringr">fixed</code>. Par exemple, si on veut compter le nombre de points dans les noms de notre tableau, le paramétrage par défaut ne fonctionnera pas car dans une expression régulière le <code>.</code> est un symbole signifiant “n’importe quel caractère” :</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">str_count</span>(d<span class="op">$</span>nom, <span class="st">&quot;.&quot;</span>)</a></code></pre></div>
+<pre><code>[1] 18 19 15 18</code></pre>
+<p>Il faut donc spécifier que notre point est bien un point avec <code data-pkg="stringr">fixed</code> :</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">str_count</span>(d<span class="op">$</span>nom, <span class="kw">fixed</span>(<span class="st">&quot;.&quot;</span>))</a></code></pre></div>
+<pre><code>[1] 0 0 1 0</code></pre>
+<p>On peut aussi modifier le comportement des expressions régulières à l’aide de la fonction <code data-pkg="stringr">regex</code>. On peut ainsi rendre les motifs insensibles à la casse avec <code>ignore_case</code> :</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">str_detect</span>(d<span class="op">$</span>nom, <span class="st">&quot;mme&quot;</span>)</a></code></pre></div>
+<pre><code>[1] FALSE FALSE FALSE FALSE</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">str_detect</span>(d<span class="op">$</span>nom, <span class="kw">regex</span>(<span class="st">&quot;mme&quot;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<pre><code>[1] FALSE  TRUE FALSE  TRUE</code></pre>
+<p>On peut également permettre aux regex d’être multilignes avec l’option <code>multiline = TRUE</code>, etc.</p>
+</div>
+<div id="inserer-une-variable-dans-une-chaine-de-caracteres" class="section level2">
+<h2>Insérer une variable dans une chaîne de caractères</h2>
+<p>La fonction <code data-pkg="stringr">str_glue</code> repose sur l’extension <code class="pkg">glue</code>. Elle permet, à l’aide d’une syntaxe un peu spécifique, de pouvoir insérer facilement les valeurs d’une ou plusieurs variables dans une chaîne de caractères. Prenons un exemple :</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">prenom &lt;-<span class="st"> &quot;Fred&quot;</span></a>
+<a class="sourceLine" id="cb53-2" title="2">age &lt;-<span class="st"> </span><span class="dv">28</span></a>
+<a class="sourceLine" id="cb53-3" title="3">anniversaire &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;1991-10-12&quot;</span>)</a>
+<a class="sourceLine" id="cb53-4" title="4"><span class="kw">str_glue</span>(<span class="st">&quot;Je m&#39;appelle {prenom}. &quot;</span>, <span class="st">&quot;L&#39;année prochaine j&#39;aurai {age + 1} ans, &quot;</span>, </a>
+<a class="sourceLine" id="cb53-5" title="5">  <span class="st">&quot;car je suis né le {format(anniversaire, &#39;%A %d %B %Y&#39;)}.&quot;</span>)</a></code></pre></div>
+<pre><code>Je m&#39;appelle Fred. L&#39;année prochaine j&#39;aurai 29 ans, car je suis né le samedi 12 octobre 1991.</code></pre>
+<p>Sa variante <code data-pkg="stringr" data-rdoc="str_glue">str_glue_data</code> est adaptée lorsque l’on travaille sur un tableau de données avec <code class="pkg">dplyr</code>.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">phrase =</span> <span class="kw">str_glue_data</span>(d, <span class="st">&quot;{nom} habite à {ville}.&quot;</span>))</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["nom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["adresse"],"name":[2],"type":["chr"],"align":["left"]},{"label":["ville"],"name":[3],"type":["chr"],"align":["left"]},{"label":["phrase"],"name":[4],"type":["S3: glue"],"align":["right"]}],"data":[{"1":"Mr Félicien Machin","2":"3 rue des Fleurs","3":"Nouméa","4":"Mr Félicien Machin habite à Nouméa."},{"1":"Mme Raymonde Bidule","2":"47 ave de la Libération","3":"Marseille","4":"Mme Raymonde Bidule habite à Marseille."},{"1":"M. Martial Truc","2":"12 rue du 17 octobre 1961","3":"Vénissieux","4":"M. Martial Truc habite à Vénissieux."},{"1":"Mme Huguette Chose","2":"221 avenue de la Libération","3":"Marseille","4":"Mme Huguette Chose habite à Marseille."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="ressources" class="section level2">
+<h2>Ressources</h2>
+<p>L’ouvrage <em>R for Data Science</em>, accessible en ligne, contient <a href="http://r4ds.had.co.nz/strings.html">un chapitre entier</a> sur les chaînes de caractères et les expressions régulières (en anglais).</p>
+<p>Le <a href="http://stringr.tidyverse.org/">site officiel de stringr</a> contient une <a href="http://stringr.tidyverse.org/reference/index.html">liste des fonctions</a> et les pages d’aide associées, ainsi qu’un <a href="http://stringr.tidyverse.org/articles/regular-expressions.html">article dédié aux expressions régulières</a>.</p>
+<p>Pour des besoins plus pointus, on pourra aussi utiliser <a href="http://www.gagolewski.com/software/stringi/">l’extension stringi</a> sur laquelle est elle-même basée <code class="pkg">stringr</code>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Il s’agit en fait d’une version très simplifiée, la <q>véritable</q> expression permettant de tester si une adresse mail est valide fait plus de 80 lignes…<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+</article>
+</div>
+
+<div class="col-sm-3" role="complementary">
+<nav class="hidden-print hidden-xs" id="nav_sidebar">
+</nav>
+</div>
+
+</div>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+
+    // active menu
+    href = window.location.pathname;
+    href = href.substr(href.lastIndexOf('/') + 1);
+    if (href=='') href = 'index.html';
+    $('a[href="' + href + '"]').parent().addClass('active');
+    $('a[href="' + href + '"]').parent().parents('li').addClass('active');
+
+    // élargir la page d'accueil
+    if (href=='index.html') $('.col-sm-9').attr('class','col-sm-12');
+
+    // rechercher
+    $("#rechercher").submit(function(event) {
+      $('input[name="q"]').val($('input[name="q"]').val() + ' site:larmarange.github.io/analyse-R');
+    });
+
+    // sidebar
+    $("#nav_sidebar").append($("#TOC").html());
+    $("#nav_sidebar ul").addClass("nav nav-stacked");
+    $("#TOC").addClass("visible-xs-block");
+    $('body').scrollspy({
+      target: '#nav_sidebar',
+      offset: 40
+    });
+
+    // Identifier les <pre> fermant
+    $('pre').next("*:not(pre)").prev().addClass('last'); // Dernier <pre> de chaque groupe contigu de <pre>
+    $('pre').parent().each(function (){
+      $(this).children('pre').last().addClass('last');
+    }); // Si <pre> est le dernier enfant de son parent
+
+    // Ajout liens rdocumentation et tooltip
+    $("code[data-pkg]").each(function( index ) {
+      pkg = $(this).attr('data-pkg');
+      if ($(this).attr('data-rdoc') !== undefined) {
+        rdocumentation = $(this).attr('data-rdoc');
+      } else {
+        rdocumentation = $(this).text();
+      }
+      fonction = $(this).text();
+      //$(this).wrap('<a href="http://www.rdocumentation.org/packages/'+pkg+'/functions/'+rdocumentation+'">');
+      $(this).wrap('<a href="http://rdrr.io/pkg/'+pkg+'/sym/'+rdocumentation+'">');
+      $(this).attr('data-toggle','tooltip');
+      $(this).attr('data-placement','top');
+      $(this).attr('title','package : ' + pkg);
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $("code.pkg").each(function( index ) {
+      //$(this).wrap('<a href="http://www.rdocumentation.org/packages/'+$(this).text()+'">');
+      $(this).wrap('<a href="http://rdrr.io/pkg/'+$(this).text()+'">');
+    });
+
+    // Figures
+    $("figure").each(function( index ) {
+      if ($(this).children("figcaption").length > 0)
+        $(this).children("figcaption:first").prepend('<span class="figure-number">Figure '+(index+1)+'.</span> ');
+      else
+        $(this).append($("<figcaption>").append('<span class="figure-number">Figure '+(index+1)+'</span>'));
+    });
+
+    // Colorbox
+
+    /*----
+    jQuery('article div img').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'figures',
+      current: "",
+      href: function(){
+        return $(this).attr('src');
+      },
+      title: function(){
+        return $(this).attr('alt');
+      }
+    });
+    jQuery('article div img').css('cursor', 'pointer');
+    jQuery('figure img').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'figures',
+      current: "",
+      href: function(){
+        return $(this).attr('src');
+      },
+      title: function(){
+        return $(this).parent().children("figcaption").text();
+      }
+    });
+    jQuery('figure img').css('cursor', 'pointer');
+
+    -----*/
+
+    /* Clipboard --------------------------*/
+
+  function changeTooltipMessage(element, msg) {
+    var tooltipOriginalTitle=element.getAttribute('data-original-title');
+    element.setAttribute('data-original-title', msg);
+    $(element).tooltip('show');
+    element.setAttribute('data-original-title', tooltipOriginalTitle);
+  }
+
+  if(ClipboardJS.isSupported()) {
+    $(document).ready(function() {
+      var copyButton = "<button type='button' class='btn btn-primary btn-copy-ex' type = 'submit' title='Copier dans le presse-papier' aria-label='Copier dans le presse-papier' data-toggle='tooltip' data-placement='left auto' data-trigger='hover' data-clipboard-copy><i class='fa fa-copy'></i></button>";
+
+      $(".examples, div.sourceCode").addClass("hasCopyButton");
+
+      // Insert copy buttons:
+      $(copyButton).prependTo(".hasCopyButton");
+
+      // Initialize tooltips:
+      $('.btn-copy-ex').tooltip({container: 'body'});
+
+      // Initialize clipboard:
+      var clipboardBtnCopies = new ClipboardJS('[data-clipboard-copy]', {
+        text: function(trigger) {
+          return trigger.parentNode.textContent;
+        }
+      });
+
+      clipboardBtnCopies.on('success', function(e) {
+        changeTooltipMessage(e.trigger, 'Copié !');
+        e.clearSelection();
+      });
+
+      clipboardBtnCopies.on('error', function() {
+        changeTooltipMessage(e.trigger,'Appuyez sur Ctrl+C ou Command+C pour copier');
+      });
+    });
+  }
+
+  // Bigfoot
+  $(".footnotes > li").addClass("footnote");
+  $.bigfoot({
+    activateOnHover: true,
+    actionOriginalFN: "ignore"
+});
+});
+</script>
+
+<!-- Utterances comments --->
+<script src="https://utteranc.es/client.js"
+        repo="larmarange/analyse-R"
+        issue-term="pathname"
+        label="commentaires"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<!-- disqus -->
+<!---
+<div class="row">
+  <div id="disqus_thread" class="col-sm-9" role="complementary"></div>
+</div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'analyse-r'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Veuillez activer JavaScript pour voir les <a href="http://disqus.com/?ref_noscript">les commentaires gérés avec Disqus.</a></noscript>
+    <!--<a href="http://disqus.com" class="dsq-brlink">Les commentaires sont hébergés par <span class="logo-disqus">Disqus</span>.</a>-->
+
+<footer>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Contenus sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/fr/" rel="nofollow">Creative Commons Attribution - Pas d’utilisation commerciale - Partage dans les mêmes conditions</a>.<br />
+      Propulsé par <a href="http://www.r-project.org/" rel="nofollow">R</a>, </a><a href="http://www.rstudio.com/" rel="nofollow">RStudio</a>, <a href="http://rmarkdown.rstudio.com/" rel="nofollow">R Markdown</a>, <a href="http://yihui.name/knitr/" rel="nofollow">knitr</a>, <a href="http://pandoc.org/" rel="nofollow">pandoc</a> et <a href="http://www.princexml.com/" rel="nofollow">Prince XML</a>. Hébergé par <a href="https://github.com/" rel="nofollow">GitHub</a>.<br />
+      <a href="https://www.zenodo.org/badge/latestdoi/34986666"><img src="https://www.zenodo.org/badge/34986666.svg" alt="DOI"></a></p>
+    </div>
+  </div>
+</footer>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+
+</body>
+</html>

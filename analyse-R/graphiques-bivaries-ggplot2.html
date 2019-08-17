@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Graphiques univariés et bivariés avec ggplot2</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="./include/analyse-R.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script type="text/javascript" src="./libs/bigfoot-2.1.4/bigfoot.min.js"></script>
+<link rel="stylesheet" href="./libs/bigfoot-2.1.4/bigfoot-number.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<link rel="stylesheet" href="./libs/colorbox-1.6.1/colorbox.css" />
+<script type="text/javascript" src="./libs/colorbox-1.6.1/jquery.colorbox-min.js"></script>
+<!--- favicon --->
+<link rel="apple-touch-icon" sizes="57x57" href="./images/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="./images/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="./images/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="./images/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="./images/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="./images/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="./images/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="./images/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="./images/favicon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./images/favicon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
+<link rel="manifest" href="./images/favicon/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="./images/favicon/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-121727005-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-121727005-1');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+<nav>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href=".">analyse-R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="manipuler" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manipuler <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_manipuler">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Prise en main</li>
+                  <li><a href="presentation-et-philosophie.html">Présentation et Philosophie</a></li>
+                  <li><a href="installation-de-R-et-RStudio.html">Installation de <strong>R</strong> et <strong>RStudio</strong></a></li>
+                  <li><a href="premier-contact.html">Premier contact</a></li>
+                  <li><a href="premier-travail-avec-les-donnees.html">Premier travail avec des données</a></li>
+                  <li><a href="extensions.html">Extensions (installation, mise à jour)</a></li>
+                  <li><a href="introduction-au-tidyverse.html">Introduction au <strong>tidyverse</strong></a></li>
+                  <li><a href="vecteurs-indexation-et-assignation.html">Vecteurs, indexation et assignation</a></li>
+                  <li><a href="listes-et-tableaux-de-donnes.html">Listes et Tableaux de données</a></li>
+                  <li><a href="facteurs-et-vecteurs-labellises.html">Facteurs et vecteurs labellisés</a></li>
+                  <li><a href="organiser-ses-fichiers.html">Organiser ses fichiers</a></li>
+                  <li><a href="import-de-donnees.html">Import de données</a></li>
+                  <li><a href="ou-trouver-de-l-aide.html">Où trouver de l'aide ?</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Manipulation de données</li>
+  		            <li><a href="visualiser-ses-donnees.html">Visualiser ses données</a></li>
+  		            <li><a href="recodage.html">Recodage de variables</a></li>
+                  <li><a href="manipuler-les-donnees-avec-dplyr.html">Manipuler les données avec <strong>dplyr</strong></a></li>
+                  <li><a href="manipulations-avancees-avec-data-table.html">Manipulations avancées avec <strong>data.table</strong></a></li>
+                  <li><a href="tris.html">Tris</a></li>
+                  <li><a href="sous-ensembles.html">Sous-ensembles</a></li>
+                  <li><a href="fusion-de-tables.html">Fusion de tables</a></li>
+                  <li><a href="gestion-des-dates.html">Gestion des dates</a></li>
+                  <li><a href="fonctions-a-fenetre.html">Fonctions à fenêtre</a></li>
+                  <li><a href="manipuler-du-texte.html">Manipuler du texte avec <strong>stringr</strong></a></li>
+                  <li><a href="reorganiser-ses-donnees-avec-tidyr.html">Réorganiser ses données avec <strong>tidyr</strong></a></li>
+                  <li><a href="scraping.html">Scraping</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Exporter</li>
+                  <li><a href="export-de-donnees.html">Export de données</a></li>
+                  <li><a href="export-de-graphiques.html">Export de graphiques</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="analyser" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Analyser <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_analyser">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Statistiques introductives</li>
+                  <li><a href="statistique-univariee.html">Statistique univariée</a></li>
+                  <li><a href="statistique-bivariee.html">Statistique bivariée</a></li>
+                  <li><a href="intro-ggplot2.html">Introduction à <strong>ggplot2</strong>, la grammaire des graphiques</a></li>
+                  <li><a href="graphiques-bivaries-ggplot2.html">Graphiques univariés et bivariés avec <strong>ggplot2</strong></a></li>
+                  <li><a href="donnees-ponderees.html">Données pondérées</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Statistiques intermédiaires</li>
+  		            <li><a href="intervalles-de-confiance.html">Intervalles de confiance</a></li>
+                  <li><a href="comparaisons-moyennes-et-proportions.html">Comparaisons (moyennes et proportions)</a></li>
+                  <li><a href="definir-un-plan-d-echantillonnage-complexe.html">Définir un plan d'échantillonnage complexe</a></li>
+                  <li><a href="regression-lineaire.html">Régression linéaire</a></li>
+                  <li><a href="regression-logistique.html">Régression logistique binaire, multinomiale et ordinale</a></li>
+                  <li><a href="analyse-des-correspondances-multiples.html">Analyse des correspondances multiples (ACM)</a></li>
+                  <li><a href="classification-ascendante-hierarchique.html">Classification ascendante hiérarchique (CAH)</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Statistiques avancées</li>
+                  <li><a href="effets-d-interaction.html">Effets d'interaction dans un modèle</a></li>
+                  <li><a href="multicolinearite.html">Multicolinéarité dans la régression</a></li>
+                  <li><a href="analyse-de-survie.html">Analyse de survie</a></li>
+                  <li><a href="analyse-de-sequences.html">Analyse de séquences</a></li>
+                  <!--<li><a href="modeles-a-effets-aleatoires.html">Modèles à effets aléatoires (modèles mixtes et GEE)</a></li>-->
+                  <li><a href="trajectoires-de-soins.html">Trajectoires de soins&nbsp;: un exemple de données longitudinales</a></li>
+                  <li><a href="analyse-de-reseaux.html">Analyse de réseaux</a></li>
+                  <li><a href="analyse-spatiale.html">Analyse spatiale</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="approfondir" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Approfondir <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_approfondir">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Graphiques</li>
+                  <li><a href="ggplot2.html"><strong>ggplot2</strong> et la grammaire des graphiques</a></li>
+                  <li><a href="etendre-ggplot2.html">Étendre ggplot2</a></li>
+                  <li><a href="combiner-plusieurs-graphiques.html">Combiner plusieurs graphiques</a></li>
+                  <li><a href="graphiques-interactifs.html">Graphiques interactifs</a></li>
+                  <li><a href="lattice-graphiques-et-formules.html"><strong>lattice</strong> : graphiques et formules</a></li>
+                  <li><a href="cartes.html">Cartes</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Programmation</li>
+  		            <li><a href="conditions-et-comparaisons.html">Conditions et comparaisons</a></li>
+                  <li><a href="formules.html">Formules</a></li>
+                  <li><a href="structures-conditionnelles.html">Structures conditionnelles</a></li>
+                  <li><a href="vectorisation.html">Vectorisation</a></li>
+                  <li><a href="expressions-regulieres.html">Expressions régulières</a></li>
+                  <!--<li class="dev"><a href="ecrire-ses-propres-fonctions.html">Écrire ses propres fonctions</a></li>-->
+                  <li><a href="rmarkdown-les-rapports-automatises.html"><strong>R Markdown</strong> : les rapports automatisés</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Divers</li>
+                  <li><a href="formater-nombres.html">Mettre en forme des nombres</a></li>
+                  <li><a href="couleurs.html">Couleurs et Palettes</a></li>
+                  <li><a href="annotations-mathematiques.html">Annotations mathématiques</a></li>
+                  <li><a href="calculer-un-age.html">Calculer un âge</a></li>
+                  <li><a href="diagramme-de-lexis.html">Diagramme de Lexis</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="index" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Index <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" id="menu_naviguer">
+            <li><a href="index-des-concepts.html">Index des concepts</a></li>
+            <li><a href="index-des-fonctions.html">Index des fonctions</a></li>
+            <li><a href="index-des-extensions.html">Index des extensions</a></li>
+          </ul>
+        </li>
+        <li><a href="analyse-R.pdf">PDF</a></li>
+        <!--<li><a href="https://github.com/larmarange/analyse-R">GitHub</a></li>-->
+      </ul>
+    <form id="rechercher" class="navbar-form navbar-right" role="search" style="padding-top: 5px;" method="get" action="https://duckduckgo.com/">
+      <div class="form-group">
+        <input name="q" type="text" class="form-control input-sm" placeholder="Rechercher">
+      </div>
+      <button type="submit" class="btn btn-default btn-sm" name="Rechercher">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </button>
+    </form>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+</nav>
+
+<div class="row">
+
+<div class="visible-lg">
+<a href="https://github.com/larmarange/analyse-R"><img style="position: absolute; top: 60px; left: 40px; border: 0;" src="./images/fork_me.png" alt="Contribuer sur GitHub"></a>
+</div>
+
+<div class="col-sm-9" role="main">
+<article>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Graphiques univariés et bivariés avec ggplot2</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#retour-sur-les-bases-de-ggplot2">Retour sur les bases de ggplot2</a></li>
+<li><a href="#histogramme">Histogramme</a></li>
+<li><a href="#densite-et-repartition-cumulee">Densité et répartition cumulée</a></li>
+<li><a href="#boites-a-moustaches-et-representations-associees">Boîtes à moustaches (et représentations associées)</a></li>
+<li><a href="#diagramme-en-batons">Diagramme en bâtons</a></li>
+<li><a href="#nuage-de-points">Nuage de points</a></li>
+<li><a href="#matrice-de-nuages-de-points-et-matrice-de-correlation">Matrice de nuages de points et matrice de corrélation</a></li>
+<li><a href="#estimation-locale-de-densite-et-representations-associees">Estimation locale de densité (et représentations associées)</a></li>
+<li><a href="#diagramme-de-cleveland">Diagramme de Cleveland</a></li>
+<li><a href="#diagrammes-en-barres">Diagrammes en barres</a></li>
+<li><a href="#graphe-en-mosaique">Graphe en mosaïque</a></li>
+<li><a href="#donnees-labellisees-et-ggplot2">Données labellisées et ggplot2</a></li>
+<li><a href="#exporter-les-graphiques-obtenus">Exporter les graphiques obtenus</a></li>
+</ul>
+</div>
+
+<p>Après avoir introduit l’extension <code class="pkg">ggplot2</code> au travers d’une <a href="intro-ggplot2.html">étude de cas</a>, nous reprenons ici les graphiques produits dans les chapitres <a href="statistique-univariee.html">statistique univariée</a> et <a href="statistique-bivariee.html">statistique bivariée</a> et montrons comment les réaliser avec <code class="pkg">ggplot2</code>.</p>
+<div id="retour-sur-les-bases-de-ggplot2" class="section level2">
+<h2>Retour sur les bases de ggplot2</h2>
+<p>L’extension <code class="pkg">ggplot2</code> nécessite que les données du graphique soient sous la forme d’un tableau de données (<em>data.frame</em>) avec une ligne par observation et les différentes valeurs à représenter sous forme de variables du tableau.</p>
+<p>Tous les graphiques avec <code class="pkg">ggplot2</code> suivent une même logique. En <strong>premier</strong> lieu, on appelera la fonction <code data-pkg="ggplot2">ggplot</code> en lui passant en paramètre le fichier de données.</p>
+<p><code class="pkg">ggplot2</code> nomme <em>esthétiques</em> les différentes propriétés visuelles d’un graphique, à savoir l’axe des x (<code>x</code>), celui des y (<code>y</code>), la couleur des lignes (<code>colour</code>), celle de remplissage des polygones (<code>fill</code>), le type de lignes (<code>linetype</code>), etc. Une représentation graphique consiste donc à représenter chacune de nos variables d’intérêt selon une esthétique donnée. En <strong>second</strong> lieu, on appelera donc la fonction <code data-pkg="ggplot2">aes</code> pour indiquer la correspondance entre les variables de notre fichier de données et les esthétiques du graphique.</p>
+<p>A minima, il est nécessaire d’indiquer en <strong>troisième</strong> lieu une <em>géométrie</em>, autrement dit la manière dont les éléments seront représentés visuellement. À chaque géométrie corresponds une fonction commençant par <code>geom_</code>, par exemple <code data-pkg="ggplot2">geom_point</code> pour dessiner des points, <code data-pkg="ggplot2" data-rdoc="geom_path">geom_line</code> pour des lignes, <code data-pkg="ggplot2">geom_bar</code> pour des barres ou encore <code data-pkg="ggplot2" data-rdoc="geom_ribbon">geom_area</code> pour des aires. Il existe de nombreuses géométries différentes, chacune prenant en compte certaines esthétiques, certaines étant requises pour cette géométrie et d’autres optionnelles. La liste des esthétiques prises en compte par chaque géométrie en indiquée dans l’aide en ligne de cette dernière.</p>
+<p>Pour un document récapitulant les principales géométries et options de <code class="pkg">ggplot2</code>, on pourra se référer à la <em>Cheat Sheet</em> officielle disponible à <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf</a>. Une version en français est disponible à l’adresse <a href="http://thinkr.fr/pdf/ggplot2-french-cheatsheet.pdf" class="uri">http://thinkr.fr/pdf/ggplot2-french-cheatsheet.pdf</a>.</p>
+<p><code class="pkg">ggplot2</code> reposant sur une syntaxe additive, la syntaxe de base d’un graphique sera donc de la forme :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">ggplot</span>(data) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> Var1, <span class="dt">fill =</span> Var2) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>()</a></code></pre></div>
+<p>De manière alternative, on peut également indiquer la correspondance entre variables et esthétiques comme deuxième argument de la fonction <code data-pkg="ggplot2">ggplot</code>. Les deux syntaxes sont équivalentes.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> Var1, <span class="dt">fill =</span> Var2)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>()</a></code></pre></div>
+<p>Il est ensuite possible de personnaliser de nombreux éléments d’un graphique et notamment :</p>
+<ul>
+<li>les <em>étiquettes</em> ou <em>labs</em> (titre, axes, légendes) avec <code data-pkg="ggplot2" data-rdoc="labs">ggtitle</code>, <code data-pkg="ggplot2" data-rdoc="labs">xlab</code>, <code data-pkg="ggplot2" data-rdoc="labs">ylab</code> ou encore la fonction plus générique <code data-pkg="ggplot2">labs</code> ;</li>
+<li>les <em>échelles</em> (<em>scales</em>) des différentes esthétiques avec les fonctions commençant par <code>scale_</code> ;</li>
+<li>les <em>facettes</em> (<em>facets</em>) avec les fonctions commençant par <code>facet_</code> ;</li>
+<li>le système de <em>coordonnées</em> avec les fonctions commençant par <code>coord_</code> ;</li>
+<li>la <em>légende</em> (<em>guides</em>) avec les fonctions commençant par <code>guide_</code> ;</li>
+<li>le <em>thème</em> du graphiques (mise en forme des différents éléments) avec <code data-pkg="ggplot2">theme</code>.</li>
+</ul>
+<p>Ces différents éléments seront abordés plus en détails dans le <a href="ggplot2-la-grammaire-des-graphiques.html">chapitre avancé sur ggplot2</a>. Dans la suite de ce chapitre, nous nous focaliserons sur les graphiques et options de base.</p>
+<div class="figure">
+<img src="images/ggplot-grammar-of-graphics.png" alt="Grammaire des graphiques de ggplot2" />
+<p class="caption">Grammaire des graphiques de ggplot2</p>
+</div>
+<p>Préparons les données des exemples et chargeons <code class="pkg">ggplot2</code> :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(questionr)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">data</span>(<span class="st">&quot;hdv2003&quot;</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4">d &lt;-<span class="st"> </span>hdv2003</a></code></pre></div>
+</div>
+<div id="histogramme" class="section level2">
+<h2>Histogramme</h2>
+<p>Pour un <dfn>histogramme</dfn>, on aura recours à la géométrie <code data-pkg="ggplot2" data-rdoc="geom_freqpoly">geom_histogram</code>. Si l’on a une observation par ligne dans le fichier de données, l’histogramme s’obtient simplement en associant la variable d’intérêt à l’esthétique <code>x</code>. Notez la syntaxe de <code data-pkg="ggplot2">aes</code> : le nom des variables est indiqué directement, sans guillemets.</p>
+<figure>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Nombres d&#39;heures passées devant la télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-4-1.png" width="1050" />
+<figcaption>
+Un histogramme
+</figcaption>
+</figure>
+<p>On peut personnaliser la couleur de remplissage des rectangles en indiduant une valeur fixe pour l’esthétique <code>fill</code> dans l’appel de <code data-pkg="ggplot2" data-rdoc="geom_freqpoly">geom_histogram</code> (et non via la fonction <code data-pkg="ggplot2">aes</code> puisqu’il ne s’agit pas d’une variable du tableau de données). L’esthétique <code>colour</code> permet de spécifier la couleur du trait des rectangles. Enfin, le paramètre <code>binwidth</code> permet de spécifier la largeur des barres.</p>
+<figure>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span><span class="st">&quot;orange&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">binwidth =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Nombres d&#39;heures passées devant la télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-5-1.png" width="1050" />
+<figcaption>
+Un histogramme en couleur
+</figcaption>
+</figure>
+<p>Comme avec la fonction <code data-pkg="graphics">hist</code>, on peut personnaliser les classes avec l’argument <code>breaks</code>.</p>
+<figure>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span><span class="st">&quot;orange&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">12</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Nombres d&#39;heures passées devant la télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-6-1.png" width="1050" />
+<figcaption>
+Un histogramme avec classes personnalisées
+</figcaption>
+</figure>
+<p>On peut ajouter à l’axe des x des tirets représentant la position des observations à l’aide de <code data-pkg="ggplot2">geom_rug</code>.</p>
+<figure>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span><span class="st">&quot;orange&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">binwidth =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">geom_rug</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Nombres d&#39;heures passées devant la télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-7-1.png" width="1050" />
+<figcaption>
+Un histogramme avec geom_rug()
+</figcaption>
+</figure>
+</div>
+<div id="densite-et-repartition-cumulee" class="section level2">
+<h2>Densité et répartition cumulée</h2>
+<p>Une <dfn>courbe de densité</dfn><dfn data-index="densité, courbe de"></dfn> s’obtient aisément avec la géométrie <code data-pkg="ggplot2">geom_density</code>.</p>
+<figure>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw">geom_density</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Nombres d&#39;heures passées devant la télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Densité&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-8-1.png" width="1050" />
+<figcaption>
+Courbe de densité
+</figcaption>
+</figure>
+<p>On peut personnaliser la fenêtre d’ajustement avec l’argument <code>adjust</code>.</p>
+<figure>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">adjust =</span> <span class="fl">1.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Nombres d&#39;heures passées devant la télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Densité&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-9-1.png" width="1050" />
+<figcaption>
+Courbe de densité avec fenêtre d’ajustement personnalisée
+</figcaption>
+</figure>
+<p>Pour la <dfn>fonction de répartition empirique</dfn><dfn data-index="répartition empirique, fonction"></dfn> ou <dfn lang="en">empirical cumulative distribution function</dfn> en anglais, on utilisera la statistique <code data-pkg="ggplot2">stat_ecdf</code>. Au passage, on notera qu’il est possible d’ajouter une <em>couche</em> à un graphique en appelant soit une <em>géométrie</em>, soit une <em>statistique</em>.</p>
+<figure>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="st">  </span><span class="kw">stat_ecdf</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Heures&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Fonction de répartition cumulée&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-10-1.png" width="1050" />
+<figcaption>
+Fonction de répartition empirique cumulée
+</figcaption>
+</figure>
+</div>
+<div id="boites-a-moustaches-et-representations-associees" class="section level2">
+<h2>Boîtes à moustaches (et représentations associées)</h2>
+<p>La géométrie <code data-pkg="ggplot2">geom_boxplot</code> nécessite <em>a minima</em> deux esthétiques : <code>x</code> et <code>y</code>. Pour représenter une variable quantitative selon une variable catégorielle, on fera donc :</p>
+<figure>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> hard.rock, <span class="dt">y =</span> age) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Ecoute du hard rock&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Répartition par âge selon que l&#39;on écoute du hard rock ou non&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-11-1.png" width="1050" />
+<figcaption>
+Boîtes à moustache
+</figcaption>
+</figure>
+<p>Lorsque l’on souhaite représenter une seule variable quantitative (statistique univariée), on passera alors une constante à l’esthétique <code>x</code>.</p>
+<figure>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">&quot;Nombre d&#39;heures passées devant la télévision&quot;</span>, <span class="dt">y =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-12-1.png" width="1050" />
+<figcaption>
+Boîte à moustache (une seule variable)
+</figcaption>
+</figure>
+<p>Une représentation alternative aux <dfn data-index="boîte à moustaches">boîtes à moustaches</dfn><dfn data-index="moustaches, boîte"></dfn> ou <dfn data-index="boxplot" lang="en">boxplots</dfn> sont les <dfn data-index="graphique en violon">graphiques en violon</dfn><dfn data-index="violon, graphique en"></dfn> ou <dfn data-index="violin plot" lang="en">violin plots</dfn>, qui représentent la densité de distribution. Ils s’obtiennent avec la géométrie <code data-pkg="ggplot2">geom_violin</code>.</p>
+<figure>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> hard.rock, <span class="dt">y =</span> age) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="st">  </span><span class="kw">geom_violin</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Ecoute du hard rock&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Répartition par âge selon que l&#39;on écoute du hard rock ou non&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-13-1.png" width="1050" />
+<figcaption>
+Graphiques en violon ou <em lang="en">violin plot</em>
+</figcaption>
+</figure>
+<p>Les boîtes à moustache peuvent parfois être trompeuses car ne représentant qu’imparfaitement la distribution d’une variable quantitative. Voir par exemple <a href="https://www.data-to-viz.com/caveat/boxplot.html">The boxplot and its pitfalls</a> sur <a href="https://www.data-to-viz.com" class="uri">https://www.data-to-viz.com</a>.</p>
+<p>Les <dfn>graphique de pirates</dfn><dfn data-index="pirate, graphique"></dfn> ou <dfn lang="en">pirateplot</dfn> sont une visualisation alternative qui combinent :</p>
+<ul>
+<li>un nuage de points représentant les données brutes ;</li>
+<li>une barre verticale représentant la moyenne ;</li>
+<li>un rectangle traduisant l’intervalle de confiance de cette moyenne ;</li>
+<li>un <q>violon</q> indiquant la distribution.</li>
+</ul>
+<p>L’extension <code class="pkg">ggpirate</code> fournit une géométrie <code data-pkg="ggpirate">geom_pirate</code> pour <code class="pkg">ggplot2</code>. Cette extension n’étant disponible que sur <strong>GitHub</strong>, on l’installera avec la commande :</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;mikabr/ggpirate&quot;</span>)</a></code></pre></div>
+<figure>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">library</span>(ggpirate)</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> hard.rock, <span class="dt">y =</span> age, <span class="dt">colour =</span> hard.rock, <span class="dt">fill =</span> hard.rock)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="st">  </span><span class="kw">geom_pirate</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Ecoute du hard rock&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Répartition par âge selon que l&#39;on écoute du hard rock ou non&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-15-1.png" width="1050" />
+<figcaption>
+Graphiques de <q>pirates</q> ou <em lang="en">pirateplot</em>
+</figcaption>
+</figure>
+</div>
+<div id="diagramme-en-batons" class="section level2">
+<h2>Diagramme en bâtons</h2>
+<p>Un <dfn>diagramme en bâtons</dfn><dfn data-index="bâtons, diagramme en"></dfn> s’obtient avec la géométrie <code data-pkg="ggplot2">geom_bar</code>.</p>
+<figure>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> freres.soeurs) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Nombre de frères et soeurs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-16-1.png" width="1050" />
+<figcaption>
+Diagramme en bâtons
+</figcaption>
+</figure>
+<p>La largeur des barres par défaut est de 0,9. Dès lors, le graphique ressemble plus à un histogramme qu’à un diagramme en bâtons. On peut personnaliser ce paramètre avec l’argument <code>width</code>.</p>
+<figure>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> freres.soeurs) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-3" title="3"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">width =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Nombre de frères et soeurs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb17-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-17-1.png" width="1050" />
+<figcaption>
+Diagramme en bâtons avec ajustement de la largeur des barres
+</figcaption>
+</figure>
+</div>
+<div id="nuage-de-points" class="section level2">
+<h2>Nuage de points</h2>
+<p>Un <dfn>nuage de points</dfn><dfn data-index="points, nuage de"></dfn> se représente facilement avec la géométrie <code data-pkg="ggplot2">geom_point</code>.</p>
+<figure>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes de télévision&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-18-1.png" width="1050" />
+<figcaption>
+Nuage de points
+</figcaption>
+</figure>
+<p>On pourra personnaliser la couleur des points avec <code>colour</code> et le niveau de transparence avec <code>alpha</code>.</p>
+<figure>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes de télévision&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-19-1.png" width="1050" />
+<figcaption>
+Nuage de points semi-transparents
+</figcaption>
+</figure>
+<p>Pour représenter une troisième variable quantitative, on pourra faire varier la taille des points avec l’esthétique <code>size</code>. Pour une variable qualitative, on pourra faire varier la couleur avec <code>colour</code>. Pour faciliter la lecture, on positionnera la légende en bas du graphique, en modifiant l’argument <code>legend.position</code> via la fonction <code data-pkg="ggplot2">theme</code>.</p>
+<figure>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">data</span>(<span class="st">&quot;rp99&quot;</span>)</a>
+<a class="sourceLine" id="cb20-2" title="2">rp99<span class="op">$</span>prop.proprio &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb20-3" title="3">rp99[rp99<span class="op">$</span>proprio <span class="op">&gt;=</span><span class="st"> </span><span class="kw">mean</span>(rp99<span class="op">$</span>proprio), ]<span class="op">$</span>prop.proprio &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb20-4" title="4">rp99<span class="op">$</span>prop.proprio &lt;-<span class="st"> </span><span class="kw">factor</span>(rp99<span class="op">$</span>prop.proprio, <span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, <span class="kw">c</span>(<span class="st">&quot;non&quot;</span>, <span class="st">&quot;oui&quot;</span>))</a>
+<a class="sourceLine" id="cb20-5" title="5"><span class="kw">ggplot</span>(rp99) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-6" title="6"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> dipl.aucun, <span class="dt">y =</span> tx.chom, <span class="dt">size =</span> pop.tot, <span class="dt">colour =</span> prop.proprio) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-8" title="8"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;% sans diplôme&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-9" title="9"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Taux de chômage&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-10" title="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">size =</span> <span class="st">&quot;Population totale&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;Proportion de propriétaires supérieure à la moyenne&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-11" title="11"><span class="st">  </span><span class="kw">theme</span>(</a>
+<a class="sourceLine" id="cb20-12" title="12">    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb20-13" title="13">    <span class="dt">legend.box =</span> <span class="st">&quot;vertical&quot;</span></a>
+<a class="sourceLine" id="cb20-14" title="14">  )</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-20-1.png" width="1050" />
+<figcaption>
+Nuage de points proportionnels
+</figcaption>
+</figure>
+<p><code data-pkg="ggplot2">geom_smooth</code> permets d’ajouter au graphique une moyenne mobile du nuage de points avec son intervalle de confiance. Notez que l’on ajoute <code data-pkg="ggplot2">geom_smooth</code> au graphique avant <code data-pkg="ggplot2">geom_point</code> puisque l’ordre dans lequel sont affichées les différentes couches du graphique dépend de l’ordre dans lequel elles ont été ajoutées. Dans cet exemple, nous souhaitons afficher les points <q>au-dessus</q> de la moyenne mobile.</p>
+<figure>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">ggplot</span>(rp99) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> dipl.sup, <span class="dt">y =</span> cadres) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-3" title="3"><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;% de diplômés du supérieur&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;% de cadres&quot;</span>)</a></code></pre></div>
+<pre><code>`geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-21-1.png" width="1050" />
+<figcaption>
+Nuage de points avec moyenne mobile
+</figcaption>
+</figure>
+<p>Si l’on préfère afficher plutôt la <dfn>droite de régression</dfn><dfn data-index="régression, droite"></dfn>, on indiquera à <code data-pkg="ggplot2">geom_smooth</code> l’agument <code>method = "lm"</code>.</p>
+<figure>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">ggplot</span>(rp99) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> dipl.sup, <span class="dt">y =</span> cadres) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-3" title="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;% de diplômés du supérieur&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;% de cadres&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-22-1.png" width="1050" />
+<figcaption>
+Nuage de points avec droite de régression linéaire
+</figcaption>
+</figure>
+</div>
+<div id="matrice-de-nuages-de-points-et-matrice-de-correlation" class="section level2">
+<h2>Matrice de nuages de points et matrice de corrélation</h2>
+<p><code class="pkg">ggplot2</code> ne fournit pas de fonction native pour la réalisation d’une matrice de nuages de points. Cependant, il existe plusieurs extensions permettant d’étendre <code class="pkg">ggplot2</code>. Parmi celles-ci, l’extension <code class="pkg">GGally</code> propose une fonction <code data-pkg="GGally">ggpairs</code> correspondant exactement à notre besoin.</p>
+<figure>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">library</span>(GGally)</a>
+<a class="sourceLine" id="cb24-2" title="2"><span class="kw">ggpairs</span>(rp99[, <span class="kw">c</span>(<span class="st">&quot;proprio&quot;</span>, <span class="st">&quot;hlm&quot;</span>, <span class="st">&quot;locataire&quot;</span>, <span class="st">&quot;maison&quot;</span>)])</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-23-1.png" width="1050" />
+<figcaption>
+Matrice de nuages de points
+</figcaption>
+</figure>
+<p><code data-pkg="GGally">ggpairs</code> accepte même des variables catégorielles ainsi que des esthétiques supplémentaires, offrant ainsi plus de possibilités que la fonction <code data-pkg="graphics">pairs</code><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<figure>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">ggpairs</span>(rp99[, <span class="kw">c</span>(<span class="st">&quot;hlm&quot;</span>, <span class="st">&quot;locataire&quot;</span>, <span class="st">&quot;maison&quot;</span>, <span class="st">&quot;prop.proprio&quot;</span>)], <span class="kw">aes</span>(<span class="dt">colour =</span> prop.proprio))</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-24-1.png" width="1050" />
+<figcaption>
+Matrice de nuages de points avec variables catégorielles
+</figcaption>
+</figure>
+<p><code class="pkg">GGally</code> propose également une fonction <code data-pkg="GGally">ggcorr</code> permettant d’afficher une <dfn>matrice de corrélation</dfn><dfn data-index="corrélation, matrice de"></dfn> entre variables quantitatives<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<figure>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">ggcorr</span>(rp99)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-25-1.png" width="1050" />
+<figcaption>
+Matrice de corrélarion
+</figcaption>
+</figure>
+</div>
+<div id="estimation-locale-de-densite-et-representations-associees" class="section level2">
+<h2>Estimation locale de densité (et représentations associées)</h2>
+<p>On peut aisément représenter une <dfn>estimation locale de densité</dfn><dfn data-index="densité, estimation locale"></dfn> avec la géométrie <code data-pkg="ggplot2">geom_density_2d</code>.</p>
+<figure>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb27-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb27-3" title="3"><span class="st">  </span><span class="kw">geom_density_2d</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb27-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb27-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes de télévision&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-26-1.png" width="1050" />
+<figcaption>
+Estimation locale de densité (contours)
+</figcaption>
+</figure>
+<p>Par défaut, le résultat est représenté sous forme de contours. Pour obtenir une représentation avec des polygones, on appelera la statistique <code data-pkg="ggplot2" data-rdoc="geom_density_2d">stat_density_2d</code> en forçant la géométrie.</p>
+<figure>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> heures.tv, <span class="dt">fill =</span> ..level..) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-3" title="3"><span class="st">  </span><span class="kw">stat_density_2d</span>(<span class="dt">geom =</span> <span class="st">&quot;polygon&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes de télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb28-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Densité&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-27-1.png" width="1050" />
+<figcaption>
+Estimation locale de densité (contours)
+</figcaption>
+</figure>
+<p><code class="pkg">ggplot2</code> propose également deux géométries, <code data-pkg="ggplot2">geom_bin2d</code> et <code data-pkg="ggplot2">geom_hex</code>, permettant d’effectuer à un comptage des effectifs en deux dimensions.</p>
+<figure>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-3" title="3"><span class="st">  </span><span class="kw">geom_bin2d</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes de télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb29-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-28-1.png" width="1050" />
+<figcaption>
+Effectifs en deux dimensions
+</figcaption>
+</figure>
+<figure>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb30-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> heures.tv) <span class="op">+</span></a>
+<a class="sourceLine" id="cb30-3" title="3"><span class="st">  </span><span class="kw">geom_hex</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb30-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Âge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb30-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Heures quotidiennes de télévision&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb30-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-29-1.png" width="1050" />
+<figcaption>
+Effectifs en deux dimensions (hexagones)
+</figcaption>
+</figure>
+<div class="note">
+<p>Pour reproduire à l’identique l’exemple donné dans le chapitre <a href="statistique-bivariee.html#deux-variables-quantitatives">statistique bivariée</a>, on aura besoin de la méthode <code data-pkg="broom" data-rdoc="xyz_tidiers">tidy</code> de l’extension <code class="pkg">broom</code> afin de transformer le résultat de <code data-pkg="MASS">kde2d</code> en un tableau de données exploitables par <code class="pkg">ggplot2</code>. <code data-pkg="broom">tidy</code> est une méthode générique permettant de transformer un grand nombre d’objets (et en particulier les résultats d’un modèle) en un tableau de données exploitable by <code class="pkg">ggplot2</code>.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">library</span>(MASS)</a>
+<a class="sourceLine" id="cb31-2" title="2">tmp &lt;-<span class="st"> </span>d[, <span class="kw">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;heures.tv&quot;</span>)]</a>
+<a class="sourceLine" id="cb31-3" title="3">tmp &lt;-<span class="st"> </span>tmp[<span class="kw">complete.cases</span>(tmp), ]</a>
+<a class="sourceLine" id="cb31-4" title="4"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb31-5" title="5">tmp &lt;-<span class="st"> </span><span class="kw">tidy</span>(<span class="kw">kde2d</span>(tmp<span class="op">$</span>age, tmp<span class="op">$</span>heures.tv))</a>
+<a class="sourceLine" id="cb31-6" title="6"><span class="kw">str</span>(tmp)</a></code></pre></div>
+<pre><code>Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   625 obs. of  3 variables:
+ $ x: num  18 21.3 24.6 27.9 31.2 ...
+ $ y: num  0 0 0 0 0 0 0 0 0 0 ...
+ $ z: num  0.00147 0.00227 0.0027 0.00291 0.00308 ...</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">ggplot</span>(tmp) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-3" title="3"><span class="st">  </span><span class="kw">geom_raster</span>(<span class="dt">interpolate =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-4" title="4"><span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colors =</span> <span class="kw">terrain.colors</span>(<span class="dv">14</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Âge&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Heures de TV&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;Densité&quot;</span>)</a></code></pre></div>
+<p><img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-30-1.png" width="1050" /></p>
+</div>
+</div>
+<div id="diagramme-de-cleveland" class="section level2">
+<h2>Diagramme de Cleveland</h2>
+<p>Pour un <dfn>diagramme de Cleveland</dfn><dfn data-index="Cleveland, diagramme"></dfn>, on aura recours à la géométrie <code data-pkg="ggplot2">geom_point</code>. Cependant, il faudra lui préciser que l’on souhaite utiliser la statistique <code data-pkg="ggplot2" data-rdoc="geom_bar">stat_count</code> afin que les effectifs soient calculés pour chaque valeur de <code>x</code>.</p>
+<figure>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> clso) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Sentiment d&#39;appartenance à une classe sociale&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb34-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-31-1.png" width="1050" />
+<figcaption>
+Diagramme de Cleveland
+</figcaption>
+</figure>
+<p>Une alternative, notamment si l’on souhaite un diagramme de Cleveland ordonné, consiste à calculer les effectifs de chaque modalité en amont. <code class="pkg">ggplot2</code> ayant besoin d’un tableau de données en entrée, nous calculerons notre tableau de fréquences avec <code data-pkg="stats">xtabs</code> et le transformerons en tableau de données avec <code data-pkg="base" data-rdoc="table">as.data.frame</code>. Pour que les niveaux de qualifaction soient représentés selon leur effectif, il est nécessaire d’ordonner les étiquettes du facteur de manière adéquate. Enfin, nous utiliserons <code data-pkg="ggplot2">coord_flip</code> pour intervertir l’axe des <code>x</code> et celui des <code>y</code>.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">tab &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">xtabs</span>(<span class="op">~</span>qualif, d))</a>
+<a class="sourceLine" id="cb35-2" title="2">tab<span class="op">$</span>qualif &lt;-<span class="st"> </span><span class="kw">factor</span>(tab<span class="op">$</span>qualif, <span class="dt">levels =</span> tab<span class="op">$</span>qualif[<span class="kw">order</span>(tab<span class="op">$</span>Freq)])</a>
+<a class="sourceLine" id="cb35-3" title="3"><span class="kw">str</span>(tab)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   7 obs. of  2 variables:
+ $ qualif: Factor w/ 7 levels &quot;Autre&quot;,&quot;Technicien&quot;,..: 4 6 2 3 5 7 1
+ $ Freq  : int  203 292 86 160 260 594 58</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw">ggplot</span>(tab) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualif, <span class="dt">y =</span> Freq) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Niveau de qualification&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-6" title="6"><span class="st">  </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-32-1.png" width="1050" />
+<figcaption>
+Diagramme de Cleveland ordonné
+</figcaption>
+</figure>
+<div class="note">
+<p>L’extension <code class="pkg">ggalt</code> propose quelques géométries supplémentaires pour <code class="pkg">ggplot2</code>. L’une d’elles dite <q>en sucettes</q> (<em>lollipop</em>) propose une représentation graphique au croisement entre un diagramme en bâtons et un diagramme de Cleveland.</p>
+<p>Pour cela, il est d’abord nécessaire d’installer la version de développement de <code class="pkg">gglat</code> à l’aide de la commande suivante :</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;hrbrmstr/ggalt&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">library</span>(ggalt)</a>
+<a class="sourceLine" id="cb39-2" title="2"><span class="kw">ggplot</span>(tab) <span class="op">+</span></a>
+<a class="sourceLine" id="cb39-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualif, <span class="dt">y =</span> Freq) <span class="op">+</span></a>
+<a class="sourceLine" id="cb39-4" title="4"><span class="st">  </span><span class="kw">geom_lollipop</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb39-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Niveau de qualification&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb39-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb39-7" title="7"><span class="st">  </span><span class="kw">coord_flip</span>()</a></code></pre></div>
+<p><img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-34-1.png" width="1050" /></p>
+</div>
+</div>
+<div id="diagrammes-en-barres" class="section level2">
+<h2>Diagrammes en barres</h2>
+<p>Un <dfn>diagramme en barres</dfn><dfn data-index="barres, diagramme en"></dfn> se construit avec la géométrie <code data-pkg="ggplot2">geom_bar</code>.</p>
+<figure>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">d<span class="op">$</span>qualreg &lt;-<span class="st"> </span><span class="kw">as.character</span>(d<span class="op">$</span>qualif)</a>
+<a class="sourceLine" id="cb40-2" title="2">d<span class="op">$</span>qualreg[d<span class="op">$</span>qualif <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Ouvrier specialise&quot;</span>, <span class="st">&quot;Ouvrier qualifie&quot;</span>)] &lt;-<span class="st"> &quot;Ouvrier&quot;</span></a>
+<a class="sourceLine" id="cb40-3" title="3">d<span class="op">$</span>qualreg[d<span class="op">$</span>qualif <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Profession intermediaire&quot;</span>, </a>
+<a class="sourceLine" id="cb40-4" title="4">  <span class="st">&quot;Technicien&quot;</span>)] &lt;-<span class="st"> &quot;Intermediaire&quot;</span></a>
+<a class="sourceLine" id="cb40-5" title="5"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-6" title="6"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualreg, <span class="dt">fill =</span> sport) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-7" title="7"><span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-8" title="8"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;CSP&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-9" title="9"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-10" title="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Pratique du sport&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-35-1.png" width="1050" />
+<figcaption>
+Diagramme en barres
+</figcaption>
+</figure>
+<p>On peut modifier la position des barres avec le paramètre <code>position</code>.</p>
+<figure>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualreg, <span class="dt">fill =</span> sport) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-3" title="3"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;CSP&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-5" title="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Pratique du sport&quot;</span>)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-36-1.png" width="1050" />
+<figcaption>
+Diagramme en barres côte à côte
+</figcaption>
+</figure>
+<p>Pour des <dfn data-index="diagramme en barres cumulées">barres cumulées</dfn><dfn data-index="barres cumulées, diagramme en"></dfn>, on aura recours à <code>position = "fill"</code>. Pour que les étiquettes de l’axe des <code>y</code> soient représentées sous forme de pourcentages (i.e. <code>25%</code> au lieu de <code>0.25</code>), on aura recours à la fonction <code data-pkg="scales" data-rdoc="percent_format">percent</code> de l’extension <code class="pkg">scales</code>, qui sera transmise à <code class="pkg">ggplot2</code> via <code data-pkg="ggplot2" data-rdoc="scale_continuous">scale_y_continuous</code>.</p>
+<figure>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="kw">library</span>(scales)</a>
+<a class="sourceLine" id="cb42-2" title="2"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualreg, <span class="dt">fill =</span> sport) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-4" title="4"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;CSP&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Pratique du sport&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb42-8" title="8"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> percent)</a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-37-1.png" width="1050" />
+<figcaption>
+Diagramme en barres cumulées
+</figcaption>
+</figure>
+<div class="note">
+<p><strong>Ajouter des étiquettes sur un diagramme en barre</strong></p>
+<p>Il est facile d’ajouter des étiquettes en ayant recours à <code data-pkg="ggplot2" data-rdoc="geom_label">geom_text</code>, à condition de lui passer les bon paramètres.</p>
+<p>Tout d’abord, il faudra préciser <code>stat = "count"</code> pour indiquer que l’on souhaite utiliser la statistique <code data-pkg="ggplot2" data-rdoc="geom_bar">stat_count</code> qui est celle utilisé par défaut par <code data-pkg="ggplot2">geom_bar</code>. C’est elle qui permets de compter le nombre d’observation.</p>
+<p>Il faut ensuite utiliser l’esthétique <code>label</code> pour indiquer ce que l’on souhaite afficher comme étiquettes. <code>..count..</code> permets d’accéder à la variable calculée par <code data-pkg="ggplot2" data-rdoc="geom_bar">stat_count</code>.</p>
+<p>Enfin, il faut indiquer la position verticale avec <code data-pkg="ggplot2">position_stack</code>. En précisant un ajustement de vertical de <code>0.5</code>, on indique que l’on souhaite positionner l’étiquette au milieu.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb43-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualreg, <span class="dt">fill =</span> sport) <span class="op">+</span></a>
+<a class="sourceLine" id="cb43-3" title="3"><span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb43-4" title="4"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> ..count..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">position =</span> <span class="kw">position_stack</span>(.<span class="dv">5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb43-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;CSP&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb43-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Effectifs&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb43-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Pratique du sport&quot;</span>)</a></code></pre></div>
+<p><img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-38-1.png" width="1050" /></p>
+<p>Pour un graphique en barre cumulées, on peut utiliser de manière similaire <code data-pkg="ggplot2" data-rdoc="position_stack">position_fill</code>.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-2" title="2"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualreg, <span class="dt">fill =</span> sport) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-3" title="3"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-4" title="4"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> ..count..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">position =</span> <span class="kw">position_fill</span>(.<span class="dv">5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;CSP&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Pratique du sport&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb44-8" title="8"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> percent)</a></code></pre></div>
+<p><img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-39-1.png" width="1050" /></p>
+<p>Pour cela, on pourra avoir recours à <code data-pkg="JLutils">stat_fill_labels</code> de l’extension <code class="pkg">JLutils</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">library</span>(JLutils)</a>
+<a class="sourceLine" id="cb45-2" title="2"><span class="kw">ggplot</span>(d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> qualreg, <span class="dt">fill =</span> sport) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-4" title="4"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-5" title="5"><span class="st">  </span><span class="kw">stat_fill_labels</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-6" title="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;CSP&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-7" title="7"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;Pratique du sport&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-9" title="9"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> percent)</a></code></pre></div>
+<p><img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-40-1.png" width="1050" /></p>
+</div>
+</div>
+<div id="graphe-en-mosaique" class="section level2">
+<h2>Graphe en mosaïque</h2>
+<p>Il n’y a pas, à ce jour, d’implémentation officielle des <dfn data-index="graphique en mosaïque">graphiques en mosaïque</dfn><dfn data-index="mosaïque, graphique"></dfn> sous <code class="pkg">ggplot2</code>. On pourra néanmoins se référer à l’extension <code class="pkg">ggmosaic</code> et sa fonction <code data-pkg="ggmosaic">geom_mosaic</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
+<figure>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw">library</span>(ggmosaic)</a>
+<a class="sourceLine" id="cb46-2" title="2"><span class="kw">levels</span>(d<span class="op">$</span>sport) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Ne fait pas de sport&quot;</span>, <span class="st">&quot;Pratique un sport&quot;</span>)</a>
+<a class="sourceLine" id="cb46-3" title="3"><span class="kw">levels</span>(d<span class="op">$</span>cuisine) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Ne cuisine pas&quot;</span>, <span class="st">&quot;Cuisine&quot;</span>)</a>
+<a class="sourceLine" id="cb46-4" title="4"><span class="kw">levels</span>(d<span class="op">$</span>sexe) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;F&quot;</span>)</a>
+<a class="sourceLine" id="cb46-5" title="5"></a>
+<a class="sourceLine" id="cb46-6" title="6"><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span></a>
+<a class="sourceLine" id="cb46-7" title="7"><span class="st">  </span><span class="kw">geom_mosaic</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">product</span>(sport, cuisine), <span class="dt">fill =</span> sexe, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb46-8" title="8"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb46-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)  </a></code></pre></div>
+<img src="graphs/graphiques-bivaries-ggplot2/unnamed-chunk-41-1.png" width="1050" />
+<figcaption>
+Graphique en mosaïque
+</figcaption>
+</figure>
+</div>
+<div id="donnees-labellisees-et-ggplot2" class="section level2">
+<h2>Données labellisées et ggplot2</h2>
+<p><code class="pkg">ggplot2</code> tient compte du type des variables, attendant à ce que les variables catégorielles soient présentées sous forme de facteurs. Si l’on utilise des données labellisées (voir le <a href="facteurs-et-vecteurs-labellises.html#labelled">chapitre dédié</a>), nos variables catégorielles seront stockées sous la forme d’un vecteur numérique avec des étiquettes. Il sera donc nécessaire de convertir ces variables en facteurs, tout simplement avec la fonction <code data-pkg="labelled">to_factor</code> de l’extension <code class="pkg">labelled</code> qui pourra utiliser les étiquettes de valeurs comme modalités du facteur.</p>
+</div>
+<div id="exporter-les-graphiques-obtenus" class="section level2">
+<h2>Exporter les graphiques obtenus</h2>
+<p>Les graphiques produits par <code class="pkg">ggplot2</code> peuvent être sauvegardés manuellement, comme expliqué dans le chapitre <q><a href="export-de-graphiques.html">Export des graphiques</a></q>, ou programmatiquement. Pour sauvegarder le dernier graphique affiché par <code class="pkg">ggplot2</code> au format PNG, il suffit d’utiliser la fonction <code data-pkg="ggplot2" data-rdoc="ggsave">ggsave</code>, qui permet d’en régler la taille (en pouces) et la résolution (en pixels par pouce ; 72 par défaut) :</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">ggsave</span>(<span class="st">&quot;mon_graphique.png&quot;</span>, <span class="dt">width =</span> <span class="dv">11</span>, <span class="dt">height =</span> <span class="dv">8</span>)</a></code></pre></div>
+<p>De la même manière, pour sauvegarder n’importe quel graphique construit avec <code class="pkg">ggplot2</code> et stocké dans un objet, il suffit de préciser le nom de cet objet, comme ci-dessous, où l’on sauvegarde le graphique contenu dans l’objet <code>p</code> au format vectoriel PDF, qui préserve la netteté du texte et des autres éléments du graphique à n’importe quelle résolution d’affichage :</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="kw">ggsave</span>(<span class="st">&quot;mon_graphique.pdf&quot;</span>, <span class="dt">plot =</span> p,</a>
+<a class="sourceLine" id="cb48-2" title="2">       <span class="dt">width =</span> <span class="dv">11</span>, <span class="dt">height =</span> <span class="dv">8</span>)</a></code></pre></div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Pour plus de détails, on pourra lire <a href="https://tgmstat.wordpress.com/2013/11/13/plot-matrix-with-the-r-package-ggally/" class="uri">https://tgmstat.wordpress.com/2013/11/13/plot-matrix-with-the-r-package-ggally/</a>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Pour une présentation détaillée de cette fonction et de ses options, voir <a href="https://briatte.github.io/ggcorr/" class="uri">https://briatte.github.io/ggcorr/</a>.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Cette extension n’est disponible que sur <a href="https://github.com/larmarange/JLutils">GitHub</a>. On peut l’installer avec la commande suivante : <code>source("https://install-github.me/larmarange/JLutils")</code><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Pour information, une première implémentation expérimentale avait été proposée avec l’extension <code class="pkg">productplots</code>, voir <a href="https://github.com/hadley/productplots" class="uri">https://github.com/hadley/productplots</a> et <a href="http://vita.had.co.nz/papers/prodplots.html" class="uri">http://vita.had.co.nz/papers/prodplots.html</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+</article>
+</div>
+
+<div class="col-sm-3" role="complementary">
+<nav class="hidden-print hidden-xs" id="nav_sidebar">
+</nav>
+</div>
+
+</div>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+
+    // active menu
+    href = window.location.pathname;
+    href = href.substr(href.lastIndexOf('/') + 1);
+    if (href=='') href = 'index.html';
+    $('a[href="' + href + '"]').parent().addClass('active');
+    $('a[href="' + href + '"]').parent().parents('li').addClass('active');
+
+    // élargir la page d'accueil
+    if (href=='index.html') $('.col-sm-9').attr('class','col-sm-12');
+
+    // rechercher
+    $("#rechercher").submit(function(event) {
+      $('input[name="q"]').val($('input[name="q"]').val() + ' site:larmarange.github.io/analyse-R');
+    });
+
+    // sidebar
+    $("#nav_sidebar").append($("#TOC").html());
+    $("#nav_sidebar ul").addClass("nav nav-stacked");
+    $("#TOC").addClass("visible-xs-block");
+    $('body').scrollspy({
+      target: '#nav_sidebar',
+      offset: 40
+    });
+
+    // Identifier les <pre> fermant
+    $('pre').next("*:not(pre)").prev().addClass('last'); // Dernier <pre> de chaque groupe contigu de <pre>
+    $('pre').parent().each(function (){
+      $(this).children('pre').last().addClass('last');
+    }); // Si <pre> est le dernier enfant de son parent
+
+    // Ajout liens rdocumentation et tooltip
+    $("code[data-pkg]").each(function( index ) {
+      pkg = $(this).attr('data-pkg');
+      if ($(this).attr('data-rdoc') !== undefined) {
+        rdocumentation = $(this).attr('data-rdoc');
+      } else {
+        rdocumentation = $(this).text();
+      }
+      fonction = $(this).text();
+      //$(this).wrap('<a href="http://www.rdocumentation.org/packages/'+pkg+'/functions/'+rdocumentation+'">');
+      $(this).wrap('<a href="http://rdrr.io/pkg/'+pkg+'/sym/'+rdocumentation+'">');
+      $(this).attr('data-toggle','tooltip');
+      $(this).attr('data-placement','top');
+      $(this).attr('title','package : ' + pkg);
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $("code.pkg").each(function( index ) {
+      //$(this).wrap('<a href="http://www.rdocumentation.org/packages/'+$(this).text()+'">');
+      $(this).wrap('<a href="http://rdrr.io/pkg/'+$(this).text()+'">');
+    });
+
+    // Figures
+    $("figure").each(function( index ) {
+      if ($(this).children("figcaption").length > 0)
+        $(this).children("figcaption:first").prepend('<span class="figure-number">Figure '+(index+1)+'.</span> ');
+      else
+        $(this).append($("<figcaption>").append('<span class="figure-number">Figure '+(index+1)+'</span>'));
+    });
+
+    // Colorbox
+
+    /*----
+    jQuery('article div img').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'figures',
+      current: "",
+      href: function(){
+        return $(this).attr('src');
+      },
+      title: function(){
+        return $(this).attr('alt');
+      }
+    });
+    jQuery('article div img').css('cursor', 'pointer');
+    jQuery('figure img').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'figures',
+      current: "",
+      href: function(){
+        return $(this).attr('src');
+      },
+      title: function(){
+        return $(this).parent().children("figcaption").text();
+      }
+    });
+    jQuery('figure img').css('cursor', 'pointer');
+
+    -----*/
+
+    /* Clipboard --------------------------*/
+
+  function changeTooltipMessage(element, msg) {
+    var tooltipOriginalTitle=element.getAttribute('data-original-title');
+    element.setAttribute('data-original-title', msg);
+    $(element).tooltip('show');
+    element.setAttribute('data-original-title', tooltipOriginalTitle);
+  }
+
+  if(ClipboardJS.isSupported()) {
+    $(document).ready(function() {
+      var copyButton = "<button type='button' class='btn btn-primary btn-copy-ex' type = 'submit' title='Copier dans le presse-papier' aria-label='Copier dans le presse-papier' data-toggle='tooltip' data-placement='left auto' data-trigger='hover' data-clipboard-copy><i class='fa fa-copy'></i></button>";
+
+      $(".examples, div.sourceCode").addClass("hasCopyButton");
+
+      // Insert copy buttons:
+      $(copyButton).prependTo(".hasCopyButton");
+
+      // Initialize tooltips:
+      $('.btn-copy-ex').tooltip({container: 'body'});
+
+      // Initialize clipboard:
+      var clipboardBtnCopies = new ClipboardJS('[data-clipboard-copy]', {
+        text: function(trigger) {
+          return trigger.parentNode.textContent;
+        }
+      });
+
+      clipboardBtnCopies.on('success', function(e) {
+        changeTooltipMessage(e.trigger, 'Copié !');
+        e.clearSelection();
+      });
+
+      clipboardBtnCopies.on('error', function() {
+        changeTooltipMessage(e.trigger,'Appuyez sur Ctrl+C ou Command+C pour copier');
+      });
+    });
+  }
+
+  // Bigfoot
+  $(".footnotes > li").addClass("footnote");
+  $.bigfoot({
+    activateOnHover: true,
+    actionOriginalFN: "ignore"
+});
+});
+</script>
+
+<!-- Utterances comments --->
+<script src="https://utteranc.es/client.js"
+        repo="larmarange/analyse-R"
+        issue-term="pathname"
+        label="commentaires"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<!-- disqus -->
+<!---
+<div class="row">
+  <div id="disqus_thread" class="col-sm-9" role="complementary"></div>
+</div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'analyse-r'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Veuillez activer JavaScript pour voir les <a href="http://disqus.com/?ref_noscript">les commentaires gérés avec Disqus.</a></noscript>
+    <!--<a href="http://disqus.com" class="dsq-brlink">Les commentaires sont hébergés par <span class="logo-disqus">Disqus</span>.</a>-->
+
+<footer>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Contenus sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/fr/" rel="nofollow">Creative Commons Attribution - Pas d’utilisation commerciale - Partage dans les mêmes conditions</a>.<br />
+      Propulsé par <a href="http://www.r-project.org/" rel="nofollow">R</a>, </a><a href="http://www.rstudio.com/" rel="nofollow">RStudio</a>, <a href="http://rmarkdown.rstudio.com/" rel="nofollow">R Markdown</a>, <a href="http://yihui.name/knitr/" rel="nofollow">knitr</a>, <a href="http://pandoc.org/" rel="nofollow">pandoc</a> et <a href="http://www.princexml.com/" rel="nofollow">Prince XML</a>. Hébergé par <a href="https://github.com/" rel="nofollow">GitHub</a>.<br />
+      <a href="https://www.zenodo.org/badge/latestdoi/34986666"><img src="https://www.zenodo.org/badge/34986666.svg" alt="DOI"></a></p>
+    </div>
+  </div>
+</footer>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+
+</body>
+</html>

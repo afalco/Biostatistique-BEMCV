@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Listes et Tableaux de données</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="./include/analyse-R.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script type="text/javascript" src="./libs/bigfoot-2.1.4/bigfoot.min.js"></script>
+<link rel="stylesheet" href="./libs/bigfoot-2.1.4/bigfoot-number.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<link rel="stylesheet" href="./libs/colorbox-1.6.1/colorbox.css" />
+<script type="text/javascript" src="./libs/colorbox-1.6.1/jquery.colorbox-min.js"></script>
+<!--- favicon --->
+<link rel="apple-touch-icon" sizes="57x57" href="./images/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="./images/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="./images/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="./images/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="./images/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="./images/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="./images/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="./images/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="./images/favicon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./images/favicon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
+<link rel="manifest" href="./images/favicon/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="./images/favicon/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-121727005-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-121727005-1');
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+<nav>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href=".">analyse-R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="manipuler" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manipuler <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_manipuler">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Prise en main</li>
+                  <li><a href="presentation-et-philosophie.html">Présentation et Philosophie</a></li>
+                  <li><a href="installation-de-R-et-RStudio.html">Installation de <strong>R</strong> et <strong>RStudio</strong></a></li>
+                  <li><a href="premier-contact.html">Premier contact</a></li>
+                  <li><a href="premier-travail-avec-les-donnees.html">Premier travail avec des données</a></li>
+                  <li><a href="extensions.html">Extensions (installation, mise à jour)</a></li>
+                  <li><a href="introduction-au-tidyverse.html">Introduction au <strong>tidyverse</strong></a></li>
+                  <li><a href="vecteurs-indexation-et-assignation.html">Vecteurs, indexation et assignation</a></li>
+                  <li><a href="listes-et-tableaux-de-donnes.html">Listes et Tableaux de données</a></li>
+                  <li><a href="facteurs-et-vecteurs-labellises.html">Facteurs et vecteurs labellisés</a></li>
+                  <li><a href="organiser-ses-fichiers.html">Organiser ses fichiers</a></li>
+                  <li><a href="import-de-donnees.html">Import de données</a></li>
+                  <li><a href="ou-trouver-de-l-aide.html">Où trouver de l'aide ?</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Manipulation de données</li>
+  		            <li><a href="visualiser-ses-donnees.html">Visualiser ses données</a></li>
+  		            <li><a href="recodage.html">Recodage de variables</a></li>
+                  <li><a href="manipuler-les-donnees-avec-dplyr.html">Manipuler les données avec <strong>dplyr</strong></a></li>
+                  <li><a href="manipulations-avancees-avec-data-table.html">Manipulations avancées avec <strong>data.table</strong></a></li>
+                  <li><a href="tris.html">Tris</a></li>
+                  <li><a href="sous-ensembles.html">Sous-ensembles</a></li>
+                  <li><a href="fusion-de-tables.html">Fusion de tables</a></li>
+                  <li><a href="gestion-des-dates.html">Gestion des dates</a></li>
+                  <li><a href="fonctions-a-fenetre.html">Fonctions à fenêtre</a></li>
+                  <li><a href="manipuler-du-texte.html">Manipuler du texte avec <strong>stringr</strong></a></li>
+                  <li><a href="reorganiser-ses-donnees-avec-tidyr.html">Réorganiser ses données avec <strong>tidyr</strong></a></li>
+                  <li><a href="scraping.html">Scraping</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Exporter</li>
+                  <li><a href="export-de-donnees.html">Export de données</a></li>
+                  <li><a href="export-de-graphiques.html">Export de graphiques</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="analyser" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Analyser <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_analyser">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Statistiques introductives</li>
+                  <li><a href="statistique-univariee.html">Statistique univariée</a></li>
+                  <li><a href="statistique-bivariee.html">Statistique bivariée</a></li>
+                  <li><a href="intro-ggplot2.html">Introduction à <strong>ggplot2</strong>, la grammaire des graphiques</a></li>
+                  <li><a href="graphiques-bivaries-ggplot2.html">Graphiques univariés et bivariés avec <strong>ggplot2</strong></a></li>
+                  <li><a href="donnees-ponderees.html">Données pondérées</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Statistiques intermédiaires</li>
+  		            <li><a href="intervalles-de-confiance.html">Intervalles de confiance</a></li>
+                  <li><a href="comparaisons-moyennes-et-proportions.html">Comparaisons (moyennes et proportions)</a></li>
+                  <li><a href="definir-un-plan-d-echantillonnage-complexe.html">Définir un plan d'échantillonnage complexe</a></li>
+                  <li><a href="regression-lineaire.html">Régression linéaire</a></li>
+                  <li><a href="regression-logistique.html">Régression logistique binaire, multinomiale et ordinale</a></li>
+                  <li><a href="analyse-des-correspondances-multiples.html">Analyse des correspondances multiples (ACM)</a></li>
+                  <li><a href="classification-ascendante-hierarchique.html">Classification ascendante hiérarchique (CAH)</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Statistiques avancées</li>
+                  <li><a href="effets-d-interaction.html">Effets d'interaction dans un modèle</a></li>
+                  <li><a href="multicolinearite.html">Multicolinéarité dans la régression</a></li>
+                  <li><a href="analyse-de-survie.html">Analyse de survie</a></li>
+                  <li><a href="analyse-de-sequences.html">Analyse de séquences</a></li>
+                  <!--<li><a href="modeles-a-effets-aleatoires.html">Modèles à effets aléatoires (modèles mixtes et GEE)</a></li>-->
+                  <li><a href="trajectoires-de-soins.html">Trajectoires de soins&nbsp;: un exemple de données longitudinales</a></li>
+                  <li><a href="analyse-de-reseaux.html">Analyse de réseaux</a></li>
+                  <li><a href="analyse-spatiale.html">Analyse spatiale</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="approfondir" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Approfondir <span class="caret"></span></a>
+          <ul class="dropdown-menu multi-column columns-3" role="menu" id="menu_approfondir">
+            <div class="row">
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Graphiques</li>
+                  <li><a href="ggplot2.html"><strong>ggplot2</strong> et la grammaire des graphiques</a></li>
+                  <li><a href="etendre-ggplot2.html">Étendre ggplot2</a></li>
+                  <li><a href="combiner-plusieurs-graphiques.html">Combiner plusieurs graphiques</a></li>
+                  <li><a href="graphiques-interactifs.html">Graphiques interactifs</a></li>
+                  <li><a href="lattice-graphiques-et-formules.html"><strong>lattice</strong> : graphiques et formules</a></li>
+                  <li><a href="cartes.html">Cartes</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+  		            <li class="dropdown-header">Programmation</li>
+  		            <li><a href="conditions-et-comparaisons.html">Conditions et comparaisons</a></li>
+                  <li><a href="formules.html">Formules</a></li>
+                  <li><a href="structures-conditionnelles.html">Structures conditionnelles</a></li>
+                  <li><a href="vectorisation.html">Vectorisation</a></li>
+                  <li><a href="expressions-regulieres.html">Expressions régulières</a></li>
+                  <!--<li class="dev"><a href="ecrire-ses-propres-fonctions.html">Écrire ses propres fonctions</a></li>-->
+                  <li><a href="rmarkdown-les-rapports-automatises.html"><strong>R Markdown</strong> : les rapports automatisés</a></li>
+  	            </ul>
+              </div>
+              <div class="col-sm-4">
+  	            <ul class="multi-column-dropdown">
+                  <li class="dropdown-header">Divers</li>
+                  <li><a href="formater-nombres.html">Mettre en forme des nombres</a></li>
+                  <li><a href="couleurs.html">Couleurs et Palettes</a></li>
+                  <li><a href="annotations-mathematiques.html">Annotations mathématiques</a></li>
+                  <li><a href="calculer-un-age.html">Calculer un âge</a></li>
+                  <li><a href="diagramme-de-lexis.html">Diagramme de Lexis</a></li>
+  	            </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="index" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Index <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" id="menu_naviguer">
+            <li><a href="index-des-concepts.html">Index des concepts</a></li>
+            <li><a href="index-des-fonctions.html">Index des fonctions</a></li>
+            <li><a href="index-des-extensions.html">Index des extensions</a></li>
+          </ul>
+        </li>
+        <li><a href="analyse-R.pdf">PDF</a></li>
+        <!--<li><a href="https://github.com/larmarange/analyse-R">GitHub</a></li>-->
+      </ul>
+    <form id="rechercher" class="navbar-form navbar-right" role="search" style="padding-top: 5px;" method="get" action="https://duckduckgo.com/">
+      <div class="form-group">
+        <input name="q" type="text" class="form-control input-sm" placeholder="Rechercher">
+      </div>
+      <button type="submit" class="btn btn-default btn-sm" name="Rechercher">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </button>
+    </form>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+</nav>
+
+<div class="row">
+
+<div class="visible-lg">
+<a href="https://github.com/larmarange/analyse-R"><img style="position: absolute; top: 60px; left: 40px; border: 0;" src="./images/fork_me.png" alt="Contribuer sur GitHub"></a>
+</div>
+
+<div class="col-sm-9" role="main">
+<article>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Listes et Tableaux de données</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#listes">Listes</a><ul>
+<li><a href="#proprietes-et-creation">Propriétés et création</a></li>
+<li><a href="#indexation">Indexation</a></li>
+</ul></li>
+<li><a href="#tableaux-de-donnees">Tableaux de données</a><ul>
+<li><a href="#proprietes-et-creation-1">Propriétés et création</a></li>
+<li><a href="#indexation-1">Indexation</a></li>
+<li><a href="#afficher-les-donnees">Afficher les données</a></li>
+</ul></li>
+<li><a href="#en-resume">En résumé</a></li>
+</ul>
+</div>
+
+<div class="note">
+<p>Il est préférable d’avoir déjà lu le chapitre <a href="vecteurs-indexation-et-assignation.html">Vecteurs, indexation et assignation</a> avant d’aborder celui-ci.</p>
+</div>
+<div id="listes" class="section level2">
+<h2>Listes</h2>
+<p>Par nature, les vecteurs ne peuvent contenir que des valeurs de même type (numériques, textuels ou logique). Or, on peut avoir besoin de représenter des objets plus complexes composés d’éléments disparates. C’est ce que permettent les <dfn data-index="liste">listes</dfn>.</p>
+<div id="proprietes-et-creation" class="section level3">
+<h3>Propriétés et création</h3>
+<p>Une liste se créée tout simplement avec la fonction <code data-pkg="base">list</code> :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">l1 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="st">&quot;abc&quot;</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2">l1</a></code></pre></div>
+<pre><code>[[1]]
+[1] 1 2 3 4 5
+
+[[2]]
+[1] &quot;abc&quot;</code></pre>
+<p>Une liste est un ensemble d’objets, quels qu’ils soient, chaque élément d’une liste pouvant avoir ses propres dimensions. Dans notre exemple précédent, nous avons créée une liste <code>l1</code> composée de deux élements : un vecteur d’entiers de longeur 5 et un vecteur textuel de longueur 1. La longueur d’une liste correspond aux nombres d’éléments qu’elle contient et s’obtient avec <code data-pkg="base">length</code> :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">length</span>(l1)</a></code></pre></div>
+<pre><code>[1] 2</code></pre>
+<p>Comme les vecteurs, une liste peut être nommées et les noms des éléments d’une liste accessibles avec <code data-pkg="base">names</code> :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">l2 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">minuscules =</span> letters, <span class="dt">majuscules =</span> LETTERS, <span class="dt">mois =</span> month.name)</a>
+<a class="sourceLine" id="cb5-2" title="2">l2</a></code></pre></div>
+<pre><code>$minuscules
+ [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot;
+[15] &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;
+
+$majuscules
+ [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot;
+[15] &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;
+
+$mois
+ [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;    
+ [5] &quot;May&quot;       &quot;June&quot;      &quot;July&quot;      &quot;August&quot;   
+ [9] &quot;September&quot; &quot;October&quot;   &quot;November&quot;  &quot;December&quot; </code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">length</span>(l2)</a></code></pre></div>
+<pre><code>[1] 3</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">names</span>(l2)</a></code></pre></div>
+<pre><code>[1] &quot;minuscules&quot; &quot;majuscules&quot; &quot;mois&quot;      </code></pre>
+<p>Que se passe-t-il maintenant si l’on effectue la commande suivante ?</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">l &lt;-<span class="st"> </span><span class="kw">list</span>(l1, l2)</a></code></pre></div>
+<p>À votre avis, quelle est la longueur de cette nouvelle liste <code>l</code> ? 5 ?</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">length</span>(l)</a></code></pre></div>
+<pre><code>[1] 2</code></pre>
+<p>Et bien non ! Elle est de longeur 2, car nous avons créé une liste composée de deux éléments qui sont eux-mêmes des listes. Cela est plus lisible si l’on fait appel à la fonction <code data-pkg="utils">str</code> qui permet de visualiser la structure d’un objet.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">str</span>(l)</a></code></pre></div>
+<pre><code>List of 2
+ $ :List of 2
+  ..$ : int [1:5] 1 2 3 4 5
+  ..$ : chr &quot;abc&quot;
+ $ :List of 3
+  ..$ minuscules: chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+  ..$ majuscules: chr [1:26] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; ...
+  ..$ mois      : chr [1:12] &quot;January&quot; &quot;February&quot; &quot;March&quot; &quot;April&quot; ...</code></pre>
+<p>Une liste peut contenir tout type d’objets, y compris d’autres listes. Pour combiner les éléments d’une liste, il faut utiliser la fonction <code data-pkg="base">append</code> :</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">l &lt;-<span class="st"> </span><span class="kw">append</span>(l1, l2)</a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="kw">length</span>(l)</a></code></pre></div>
+<pre><code>[1] 5</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">str</span>(l)</a></code></pre></div>
+<pre><code>List of 5
+ $           : int [1:5] 1 2 3 4 5
+ $           : chr &quot;abc&quot;
+ $ minuscules: chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+ $ majuscules: chr [1:26] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; ...
+ $ mois      : chr [1:12] &quot;January&quot; &quot;February&quot; &quot;March&quot; &quot;April&quot; ...</code></pre>
+<p>On peut noter en passant qu’une liste peut tout à fait n’être que partiellement nommée.</p>
+</div>
+<div id="indexation" class="section level3">
+<h3>Indexation</h3>
+<p>Les crochets simples (<code>[]</code>) fonctionnent comme pour les vecteurs. On peut utiliser à la fois l’<dfn>indexation par position</dfn><dfn data-index="position, indexation"></dfn>, l’<dfn>indexation par nom</dfn><dfn data-index="nom, indexation"></dfn> et l’<dfn>indexation par condition</dfn><dfn data-index="condition, indexation"></dfn>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">l</a></code></pre></div>
+<pre><code>[[1]]
+[1] 1 2 3 4 5
+
+[[2]]
+[1] &quot;abc&quot;
+
+$minuscules
+ [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot;
+[15] &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;
+
+$majuscules
+ [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot;
+[15] &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;
+
+$mois
+ [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;    
+ [5] &quot;May&quot;       &quot;June&quot;      &quot;July&quot;      &quot;August&quot;   
+ [9] &quot;September&quot; &quot;October&quot;   &quot;November&quot;  &quot;December&quot; </code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">l[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>)]</a></code></pre></div>
+<pre><code>[[1]]
+[1] 1 2 3 4 5
+
+$minuscules
+ [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot;
+[15] &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;
+
+$majuscules
+ [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot;
+[15] &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">l[<span class="kw">c</span>(<span class="st">&quot;majuscules&quot;</span>, <span class="st">&quot;minuscules&quot;</span>)]</a></code></pre></div>
+<pre><code>$majuscules
+ [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot;
+[15] &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;
+
+$minuscules
+ [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot;
+[15] &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">l[<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>)]</a></code></pre></div>
+<pre><code>[[1]]
+[1] 1 2 3 4 5
+
+[[2]]
+[1] &quot;abc&quot;
+
+$mois
+ [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;    
+ [5] &quot;May&quot;       &quot;June&quot;      &quot;July&quot;      &quot;August&quot;   
+ [9] &quot;September&quot; &quot;October&quot;   &quot;November&quot;  &quot;December&quot; </code></pre>
+<p>Même si l’on extrait un seul élément, l’extraction obtenue avec les crochets simples renvoie toujours une liste, ici composée d’un seul élément :</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">str</span>(l[<span class="dv">1</span>])</a></code></pre></div>
+<pre><code>List of 1
+ $ : int [1:5] 1 2 3 4 5</code></pre>
+<p>Supposons que je souhaite calculer la moyenne des valeurs du premier élément de ma liste. Essayons la commande suivante :</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">mean</span>(l[<span class="dv">1</span>])</a></code></pre></div>
+<pre><code>Warning in mean.default(l[1]): argument is not numeric or
+logical: returning NA</code></pre>
+<pre><code>[1] NA</code></pre>
+<p>Nous obtenons un message d’erreur. En effet, <strong>R</strong> ne sait pas calculer une moyenne à partir d’une liste. Ce qu’il lui faut, c’est un vecteur de valeurs numériques. Autrement dit, ce que nous cherchons à obtenir c’est le contenu même du premier élément de notre liste et non une liste à un seul élément.</p>
+<p>C’est ici que les doubles crochets (<code>[[]]</code>) vont rentrer en jeu. Pour ces derniers, nous pourrons utiliser l’indexation par position ou l’indexation par nom, mais pas l’indexation par condition. De plus, le critère que l’on indiquera doit indiquer <em>un et un seul</em> élément de notre liste. Au lieu de renvoyer une liste à un élément, les doubles crochets vont renvoyer l’élément désigné. Vite, un exemple :</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">str</span>(l[<span class="dv">1</span>])</a></code></pre></div>
+<pre><code>List of 1
+ $ : int [1:5] 1 2 3 4 5</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">str</span>(l[[<span class="dv">1</span>]])</a></code></pre></div>
+<pre><code> int [1:5] 1 2 3 4 5</code></pre>
+<p>Maintenant, nous pouvons calculer notre moyenne :</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw">mean</span>(l[[<span class="dv">1</span>]])</a></code></pre></div>
+<pre><code>[1] 3</code></pre>
+<p>Nous pouvons aussi tester l’indexation par nom.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">l[[<span class="st">&quot;mois&quot;</span>]]</a></code></pre></div>
+<pre><code> [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;    
+ [5] &quot;May&quot;       &quot;June&quot;      &quot;July&quot;      &quot;August&quot;   
+ [9] &quot;September&quot; &quot;October&quot;   &quot;November&quot;  &quot;December&quot; </code></pre>
+<p>Mais il faut avouer que cette écriture avec doubles crochets et guillemets est un peu lourde. Heureusement, un nouvel acteur entre en scène : le symbole dollar (<code>$</code>). C’est un raccourci des doubles crochets pour l’indexation par nom. Que l’on utilise ainsi :</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">l<span class="op">$</span>mois</a></code></pre></div>
+<pre><code> [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;    
+ [5] &quot;May&quot;       &quot;June&quot;      &quot;July&quot;      &quot;August&quot;   
+ [9] &quot;September&quot; &quot;October&quot;   &quot;November&quot;  &quot;December&quot; </code></pre>
+<p>Les écritures <code>l$mois</code> et <code>l[["mois"]]</code> sont équivalentes. Attention ! Cela ne fonctionne que pour l’indexation par nom.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">l<span class="op">$</span><span class="dv">1</span></a></code></pre></div>
+<pre><code>Error: unexpected numeric constant in &quot;l$1&quot;</code></pre>
+<p>L’<dfn>assignation par indexation</dfn><dfn data-index="indexation, assignation"></dfn> fonctionne également avec les doubles crochets ou le signe dollar :</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">l[[<span class="dv">2</span>]] &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;vecteur&quot;</span>, <span class="st">&quot;textuel&quot;</span>))</a>
+<a class="sourceLine" id="cb45-2" title="2">l<span class="op">$</span>mois &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Janvier&quot;</span>, <span class="st">&quot;Février&quot;</span>, <span class="st">&quot;Mars&quot;</span>)</a>
+<a class="sourceLine" id="cb45-3" title="3">l</a></code></pre></div>
+<pre><code>[[1]]
+[1] 1 2 3 4 5
+
+[[2]]
+[[2]][[1]]
+[1] &quot;un&quot;      &quot;vecteur&quot; &quot;textuel&quot;
+
+
+$minuscules
+ [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot;
+[15] &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;
+
+$majuscules
+ [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot;
+[15] &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;
+
+$mois
+[1] &quot;Janvier&quot; &quot;Février&quot; &quot;Mars&quot;   </code></pre>
+</div>
+</div>
+<div id="tableaux-de-donnees" class="section level2">
+<h2>Tableaux de données</h2>
+<p>Il y a un type d’objets que nous avons déjà abordé dans le chapitre <a href="premier-travail-avec-les-donnees.html">Premier travail avec les données</a>, il s’agit du <dfn>tableau de données</dfn><dfn data-index="données, tableau"></dfn> ou <dfn lang="en">data frame</dfn> en anglais.</p>
+<div id="proprietes-et-creation-1" class="section level3">
+<h3>Propriétés et création</h3>
+<p>Dans <strong>R</strong>, les tableaux de données sont tout simplement des listes avec quelques propriétés spéficiques :</p>
+<ul>
+<li>les tableaux de données ne peuvent contenir que des vecteurs ;</li>
+<li>tous les vecteurs d’un tableau de données ont la même longueur ;</li>
+<li>tous les éléments d’un tableau de données sont nommés et ont chacun un nom unique.</li>
+</ul>
+<p>Dès lors, un tableau de données correspond aux fichiers de données que l’on a l’habitude de manipuler dans d’autres logiciels de statistiques comme <strong>SPSS</strong> ou <strong>Stata</strong>. Les variables sont organisées en colonnes et les observations en lignes.</p>
+<p>On peut créer un tableau de données avec la fonction <code data-pkg="base">data.frame</code> :</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sexe =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span>, <span class="st">&quot;f&quot;</span>, <span class="st">&quot;h&quot;</span>, <span class="st">&quot;h&quot;</span>), <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">52</span>, <span class="dv">31</span>, </a>
+<a class="sourceLine" id="cb47-2" title="2">  <span class="dv">29</span>, <span class="dv">35</span>), <span class="dt">blond =</span> <span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>))</a>
+<a class="sourceLine" id="cb47-3" title="3">df</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["sexe"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["blond"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"52","3":"FALSE"},{"1":"f","2":"31","3":"TRUE"},{"1":"h","2":"29","3":"TRUE"},{"1":"h","2":"35","3":"FALSE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="kw">str</span>(df)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   4 obs. of  3 variables:
+ $ sexe : Factor w/ 2 levels &quot;f&quot;,&quot;h&quot;: 1 1 2 2
+ $ age  : num  52 31 29 35
+ $ blond: logi  FALSE TRUE TRUE FALSE</code></pre>
+<p>La fonction <code data-pkg="base">data.frame</code> a un gros défaut : si on ne désactive pas l’option <code>stringsAsFactors</code> elle transforme les chaînes de caractères, ici la variable <var>sexe</var> en facteurs (un type de vecteur que nous aborderons plus en détail dans un <a href="facteurs-et-vecteurs-labellises.html">prochain chapitre</a>).</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sexe =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span>, <span class="st">&quot;f&quot;</span>, <span class="st">&quot;h&quot;</span>, <span class="st">&quot;h&quot;</span>), <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">52</span>, <span class="dv">31</span>, </a>
+<a class="sourceLine" id="cb50-2" title="2">  <span class="dv">29</span>, <span class="dv">35</span>), <span class="dt">blond =</span> <span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb50-3" title="3">df</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["blond"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"52","3":"FALSE"},{"1":"f","2":"31","3":"TRUE"},{"1":"h","2":"29","3":"TRUE"},{"1":"h","2":"35","3":"FALSE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">str</span>(df)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   4 obs. of  3 variables:
+ $ sexe : chr  &quot;f&quot; &quot;f&quot; &quot;h&quot; &quot;h&quot;
+ $ age  : num  52 31 29 35
+ $ blond: logi  FALSE TRUE TRUE FALSE</code></pre>
+<p>Un tableau de données étant une liste, la fonction <code data-pkg="base">length</code> renverra le nombre d’éléments de la liste, donc dans le cas présent le nombre de variables et <code data-pkg="base">names</code> leurs noms :</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="kw">length</span>(df)</a></code></pre></div>
+<pre><code>[1] 3</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">names</span>(df)</a></code></pre></div>
+<pre><code>[1] &quot;sexe&quot;  &quot;age&quot;   &quot;blond&quot;</code></pre>
+<p>Comme tous les éléments d’un tableau de données ont la même longeur, cet objet peut être vu comme bidimensionnel. Les fonctions <code data-pkg="base">nrow</code>, <code data-pkg="base" data-rdoc="nrow">ncol</code> et <code data-pkg="base">dim</code> donnent respectivement le nombre de lignes, le nombre de colonnes et les dimensions de notre tableau.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">nrow</span>(df)</a></code></pre></div>
+<pre><code>[1] 4</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="kw">ncol</span>(df)</a></code></pre></div>
+<pre><code>[1] 3</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="kw">dim</span>(df)</a></code></pre></div>
+<pre><code>[1] 4 3</code></pre>
+<p>De plus, tout comme les colonnes ont un nom, il est aussi possible de nommer les lignes avec <code data-pkg="base">row.names</code> :</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="kw">row.names</span>(df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Anna&quot;</span>, <span class="st">&quot;Mary-Ann&quot;</span>, <span class="st">&quot;Michael&quot;</span>, <span class="st">&quot;John&quot;</span>)</a>
+<a class="sourceLine" id="cb63-2" title="2">df</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["blond"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"52","3":"FALSE","_rn_":"Anna"},{"1":"f","2":"31","3":"TRUE","_rn_":"Mary-Ann"},{"1":"h","2":"29","3":"TRUE","_rn_":"Michael"},{"1":"h","2":"35","3":"FALSE","_rn_":"John"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="indexation-1" class="section level3">
+<h3>Indexation</h3>
+<p>Les tableaux de données étant des listes, nous pouvons donc utiliser les crochets simples (<code>[]</code>), les crochets doubles (<code>[[]]</code>) et le symbole dollar (<code>$</code>) pour extraire des parties de notre tableau, de la même manière que pour n’importe quelle liste.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1">df[<span class="dv">1</span>]</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"f","_rn_":"Anna"},{"1":"f","_rn_":"Mary-Ann"},{"1":"h","_rn_":"Michael"},{"1":"h","_rn_":"John"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1">df[[<span class="dv">1</span>]]</a></code></pre></div>
+<pre><code>[1] &quot;f&quot; &quot;f&quot; &quot;h&quot; &quot;h&quot;</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1">df<span class="op">$</span>sexe</a></code></pre></div>
+<pre><code>[1] &quot;f&quot; &quot;f&quot; &quot;h&quot; &quot;h&quot;</code></pre>
+<p>Cependant, un tableau de données étant un objet bidimensionnel, il est également possible d’extraire des données sur deux dimensions, à savoir un premier critère portant sur les lignes et un second portant sur les colonnes. Pour cela, nous utiliserons les crochets simples (<code>[]</code>) en séparant nos deux critères par une virgule (<code>,</code>).</p>
+<p>Un premier exemple :</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">df</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["blond"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"52","3":"FALSE","_rn_":"Anna"},{"1":"f","2":"31","3":"TRUE","_rn_":"Mary-Ann"},{"1":"h","2":"29","3":"TRUE","_rn_":"Michael"},{"1":"h","2":"35","3":"FALSE","_rn_":"John"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">df[<span class="dv">3</span>, <span class="dv">2</span>]</a></code></pre></div>
+<pre><code>[1] 29</code></pre>
+<p>Cette première commande indique que nous souhaitons la troisième ligne de la seconde colonne, autrement dit l’âge de Michael. Le même résultat peut être obtenu avec l’indexation par nom, l’indexation par condition, ou un mélange de tout ça.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">df[<span class="st">&quot;Michael&quot;</span>, <span class="st">&quot;age&quot;</span>]</a></code></pre></div>
+<pre><code>[1] 29</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">df[<span class="kw">c</span>(F, F, T, F), <span class="kw">c</span>(<span class="kw">c</span>(F, T, F))]</a></code></pre></div>
+<pre><code>[1] 29</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1">df[<span class="dv">3</span>, <span class="st">&quot;age&quot;</span>]</a></code></pre></div>
+<pre><code>[1] 29</code></pre>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">df[<span class="st">&quot;Michael&quot;</span>, <span class="dv">2</span>]</a></code></pre></div>
+<pre><code>[1] 29</code></pre>
+<p>Il est également possible de ne préciser qu’un seul critère. Par exemple, si je souhaite les deux premières observations, ou les variables <var>sexe</var> et <var>blond</var> :</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">df[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["blond"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"52","3":"FALSE","_rn_":"Anna"},{"1":"f","2":"31","3":"TRUE","_rn_":"Mary-Ann"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1">df[, <span class="kw">c</span>(<span class="st">&quot;sexe&quot;</span>, <span class="st">&quot;blond&quot;</span>)]</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]},{"label":["blond"],"name":[2],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"FALSE","_rn_":"Anna"},{"1":"f","2":"TRUE","_rn_":"Mary-Ann"},{"1":"h","2":"TRUE","_rn_":"Michael"},{"1":"h","2":"FALSE","_rn_":"John"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Il a suffit de laisser un espace vide avant ou après la virgule. ATTENTION ! Il est cependant impératif de laisser la virgule pour indiquer à <strong>R</strong> que l’on souhaite effectuer une indexation à deux dimensions. Si l’on oublie la virgule, cela nous ramène au mode de fonctionnement des listes. Et le résultat n’est pas forcément le même :</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">df[<span class="dv">2</span>, ]</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sexe"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["blond"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"f","2":"31","3":"TRUE","_rn_":"Mary-Ann"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1">df[, <span class="dv">2</span>]</a></code></pre></div>
+<pre><code>[1] 52 31 29 35</code></pre>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">df[<span class="dv">2</span>]</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"52","_rn_":"Anna"},{"1":"31","_rn_":"Mary-Ann"},{"1":"29","_rn_":"Michael"},{"1":"35","_rn_":"John"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="note">
+<p>Au passage, on pourra noter quelques subtilités sur le résultat renvoyé.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">str</span>(df[<span class="dv">2</span>, ])</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   1 obs. of  3 variables:
+ $ sexe : chr &quot;f&quot;
+ $ age  : num 31
+ $ blond: logi TRUE</code></pre>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">str</span>(df[, <span class="dv">2</span>])</a></code></pre></div>
+<pre><code> num [1:4] 52 31 29 35</code></pre>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw">str</span>(df[<span class="dv">2</span>])</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   4 obs. of  1 variable:
+ $ age: num  52 31 29 35</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">str</span>(df[[<span class="dv">2</span>]])</a></code></pre></div>
+<pre><code> num [1:4] 52 31 29 35</code></pre>
+<p><code>df[2, ]</code> signifie que l’on veut toutes les variables pour le second individu. Le résultat est un tableau de données à une ligne et trois colonnes. <code>df[2]</code> correspond au mode d’extraction des listes et renvoie donc une liste à un élément, en l’occurence un tableau de données à quatre observations et une variable. <code>df[[2]]</code> quant à lui renvoie le contenu de cette variable, soit un vecteur numérique de longeur quatre. Reste <code>df[, 2]</code> qui signifie renvoie toutes les observations pour la seconde colonne. Or l’<dfn>indexation bidimensionnelle</dfn> a un fonctionnement un peu particulier : par défaut cela renvoie un tableau de données mais s’il n’y a qu’une seule variable dans l’extraction, c’est un vecteur qui est renvoyé. Pour plus de détails, on pourra consulter l’entrée d’aide de <code data-pkg="base" data-rdoc="Extract.data.frame">[.data.frame</code>.</p>
+</div>
+</div>
+<div id="afficher-les-donnees" class="section level3">
+<h3>Afficher les données</h3>
+<p>Prenons un tableau de données un peu plus conséquent, en l’occurence un jeu de données disponible dans l’extension <code class="pkg">questionr</code> et correspondant à un extrait de l’enquête <em>Histoire de vie</em> réalisée par l’INSEE en 2003. Il contient 2000 individus et 20 variables.</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1"><span class="kw">library</span>(questionr)</a>
+<a class="sourceLine" id="cb94-2" title="2"><span class="kw">data</span>(hdv2003)</a>
+<a class="sourceLine" id="cb94-3" title="3">d &lt;-<span class="st"> </span>hdv2003</a></code></pre></div>
+<p>Si l’on demande à afficher l’objet <code>d</code> dans la console (résultat non reproduit ici), <strong>R</strong> va afficher l’ensemble du contenu de <code>d</code> à l’écran ce qui, sur un tableau de cette taille, ne sera pas très lisible. Pour une exploration visuelle, le plus simple est souvent d’utiliser la <dfn>visionneuse</dfn> intégrée à <strong>RStudio</strong> et que l’on peut appeller avec la fonction <code data-pkg="utils">View</code>.</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">View</span>(d)</a></code></pre></div>
+<p>Les fonctions <code data-pkg="utils">head</code> et <code data-pkg="utils" data-rdoc="head">tail</code>, qui marchent également sur les vecteurs, permettent d’afficher seulement les premières (respectivement les dernières) lignes d’un tableau de données :</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1"><span class="kw">head</span>(d)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["age"],"name":[2],"type":["int"],"align":["right"]},{"label":["sexe"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["nivetud"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["poids"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["occup"],"name":[6],"type":["fctr"],"align":["left"]},{"label":["qualif"],"name":[7],"type":["fctr"],"align":["left"]},{"label":["freres.soeurs"],"name":[8],"type":["int"],"align":["right"]},{"label":["clso"],"name":[9],"type":["fctr"],"align":["left"]},{"label":["relig"],"name":[10],"type":["fctr"],"align":["left"]},{"label":["trav.imp"],"name":[11],"type":["fctr"],"align":["left"]},{"label":["trav.satisf"],"name":[12],"type":["fctr"],"align":["left"]},{"label":["hard.rock"],"name":[13],"type":["fctr"],"align":["left"]},{"label":["lecture.bd"],"name":[14],"type":["fctr"],"align":["left"]},{"label":["peche.chasse"],"name":[15],"type":["fctr"],"align":["left"]},{"label":["cuisine"],"name":[16],"type":["fctr"],"align":["left"]},{"label":["bricol"],"name":[17],"type":["fctr"],"align":["left"]},{"label":["cinema"],"name":[18],"type":["fctr"],"align":["left"]},{"label":["sport"],"name":[19],"type":["fctr"],"align":["left"]},{"label":["heures.tv"],"name":[20],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"28","3":"Femme","4":"Enseignement superieur y compris technique superieur","5":"2634.398","6":"Exerce une profession","7":"Employe","8":"8","9":"Oui","10":"Ni croyance ni appartenance","11":"Peu important","12":"Insatisfaction","13":"Non","14":"Non","15":"Non","16":"Oui","17":"Non","18":"Non","19":"Non","20":"0","_rn_":"1"},{"1":"2","2":"23","3":"Femme","4":"NA","5":"9738.396","6":"Etudiant, eleve","7":"NA","8":"2","9":"Oui","10":"Ni croyance ni appartenance","11":"NA","12":"NA","13":"Non","14":"Non","15":"Non","16":"Non","17":"Non","18":"Oui","19":"Oui","20":"1","_rn_":"2"},{"1":"3","2":"59","3":"Homme","4":"Derniere annee d'etudes primaires","5":"3994.102","6":"Exerce une profession","7":"Technicien","8":"2","9":"Non","10":"Ni croyance ni appartenance","11":"Aussi important que le reste","12":"Equilibre","13":"Non","14":"Non","15":"Non","16":"Non","17":"Non","18":"Non","19":"Oui","20":"0","_rn_":"3"},{"1":"4","2":"34","3":"Homme","4":"Enseignement superieur y compris technique superieur","5":"5731.662","6":"Exerce une profession","7":"Technicien","8":"1","9":"Non","10":"Appartenance sans pratique","11":"Moins important que le reste","12":"Satisfaction","13":"Non","14":"Non","15":"Non","16":"Oui","17":"Oui","18":"Oui","19":"Oui","20":"2","_rn_":"4"},{"1":"5","2":"71","3":"Femme","4":"Derniere annee d'etudes primaires","5":"4329.094","6":"Retraite","7":"Employe","8":"0","9":"Oui","10":"Pratiquant regulier","11":"NA","12":"NA","13":"Non","14":"Non","15":"Non","16":"Non","17":"Non","18":"Non","19":"Non","20":"3","_rn_":"5"},{"1":"6","2":"35","3":"Femme","4":"Enseignement technique ou professionnel court","5":"8674.699","6":"Exerce une profession","7":"Employe","8":"5","9":"Non","10":"Ni croyance ni appartenance","11":"Le plus important","12":"Equilibre","13":"Non","14":"Non","15":"Non","16":"Non","17":"Non","18":"Oui","19":"Oui","20":"2","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1"><span class="kw">tail</span>(d, <span class="dv">2</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["age"],"name":[2],"type":["int"],"align":["right"]},{"label":["sexe"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["nivetud"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["poids"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["occup"],"name":[6],"type":["fctr"],"align":["left"]},{"label":["qualif"],"name":[7],"type":["fctr"],"align":["left"]},{"label":["freres.soeurs"],"name":[8],"type":["int"],"align":["right"]},{"label":["clso"],"name":[9],"type":["fctr"],"align":["left"]},{"label":["relig"],"name":[10],"type":["fctr"],"align":["left"]},{"label":["trav.imp"],"name":[11],"type":["fctr"],"align":["left"]},{"label":["trav.satisf"],"name":[12],"type":["fctr"],"align":["left"]},{"label":["hard.rock"],"name":[13],"type":["fctr"],"align":["left"]},{"label":["lecture.bd"],"name":[14],"type":["fctr"],"align":["left"]},{"label":["peche.chasse"],"name":[15],"type":["fctr"],"align":["left"]},{"label":["cuisine"],"name":[16],"type":["fctr"],"align":["left"]},{"label":["bricol"],"name":[17],"type":["fctr"],"align":["left"]},{"label":["cinema"],"name":[18],"type":["fctr"],"align":["left"]},{"label":["sport"],"name":[19],"type":["fctr"],"align":["left"]},{"label":["heures.tv"],"name":[20],"type":["dbl"],"align":["right"]}],"data":[{"1":"1999","2":"24","3":"Femme","4":"Enseignement technique ou professionnel court","5":"13740.810","6":"Exerce une profession","7":"Employe","8":"2","9":"Non","10":"Appartenance sans pratique","11":"Moins important que le reste","12":"Equilibre","13":"Non","14":"Non","15":"Non","16":"Non","17":"Non","18":"Oui","19":"Non","20":"0.3","_rn_":"1999"},{"1":"2000","2":"66","3":"Femme","4":"Enseignement technique ou professionnel long","5":"7709.513","6":"Au foyer","7":"Employe","8":"3","9":"Non","10":"Appartenance sans pratique","11":"NA","12":"NA","13":"Non","14":"Oui","15":"Non","16":"Oui","17":"Non","18":"Non","19":"Non","20":"0.0","_rn_":"2000"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>L’extension <code class="pkg">dplyr</code>, que nous n’aborderons en détails que <a href="manipuler-les-donnees-avec-dplyr.html">plus tard</a>, propose une fonction <code data-pkg="tibble">glimpse</code> (ce qui signifie <q>aperçu</q> en anglais) qui permet de visualiser rapidement et de manière condensée le contenu d’un tableau de données.</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb98-2" title="2"><span class="kw">glimpse</span>(d)</a></code></pre></div>
+<pre><code>Observations: 2,000
+Variables: 20
+$ id            &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11...
+$ age           &lt;int&gt; 28, 23, 59, 34, 71, 35, 60, 47, 2...
+$ sexe          &lt;fct&gt; Femme, Femme, Homme, Homme, Femme...
+$ nivetud       &lt;fct&gt; &quot;Enseignement superieur y compris...
+$ poids         &lt;dbl&gt; 2634.3982, 9738.3958, 3994.1025, ...
+$ occup         &lt;fct&gt; &quot;Exerce une profession&quot;, &quot;Etudian...
+$ qualif        &lt;fct&gt; Employe, NA, Technicien, Technici...
+$ freres.soeurs &lt;int&gt; 8, 2, 2, 1, 0, 5, 1, 5, 4, 2, 3, ...
+$ clso          &lt;fct&gt; Oui, Oui, Non, Non, Oui, Non, Oui...
+$ relig         &lt;fct&gt; Ni croyance ni appartenance, Ni c...
+$ trav.imp      &lt;fct&gt; Peu important, NA, Aussi importan...
+$ trav.satisf   &lt;fct&gt; Insatisfaction, NA, Equilibre, Sa...
+$ hard.rock     &lt;fct&gt; Non, Non, Non, Non, Non, Non, Non...
+$ lecture.bd    &lt;fct&gt; Non, Non, Non, Non, Non, Non, Non...
+$ peche.chasse  &lt;fct&gt; Non, Non, Non, Non, Non, Non, Oui...
+$ cuisine       &lt;fct&gt; Oui, Non, Non, Oui, Non, Non, Oui...
+$ bricol        &lt;fct&gt; Non, Non, Non, Oui, Non, Non, Non...
+$ cinema        &lt;fct&gt; Non, Oui, Non, Oui, Non, Oui, Non...
+$ sport         &lt;fct&gt; Non, Oui, Oui, Oui, Non, Oui, Non...
+$ heures.tv     &lt;dbl&gt; 0.0, 1.0, 0.0, 2.0, 3.0, 2.0, 2.9...</code></pre>
+<p>L’extension <code class="pkg">questionr</code> propose une fonction <code data-pkg="questionr">lookfor</code> qui permet de lister les différentes variables d’un fichier de données :</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">lookfor</span>(d)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"id","_rn_":"1"},{"1":"age","_rn_":"2"},{"1":"sexe","_rn_":"3"},{"1":"nivetud","_rn_":"4"},{"1":"poids","_rn_":"5"},{"1":"occup","_rn_":"6"},{"1":"qualif","_rn_":"7"},{"1":"freres.soeurs","_rn_":"8"},{"1":"clso","_rn_":"9"},{"1":"relig","_rn_":"10"},{"1":"trav.imp","_rn_":"11"},{"1":"trav.satisf","_rn_":"12"},{"1":"hard.rock","_rn_":"13"},{"1":"lecture.bd","_rn_":"14"},{"1":"peche.chasse","_rn_":"15"},{"1":"cuisine","_rn_":"16"},{"1":"bricol","_rn_":"17"},{"1":"cinema","_rn_":"18"},{"1":"sport","_rn_":"19"},{"1":"heures.tv","_rn_":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Lorsque l’on a un gros tableau de données avec de nombreuses variables, il peut être difficile de retrouver la ou les variables d’intérêt. Il est possible d’indiquer à <code data-pkg="questionr">lookfor</code> un mot-clé pour limiter la recherche. Par exemple :</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="kw">lookfor</span>(d, <span class="st">&quot;trav&quot;</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"trav.imp","_rn_":"11"},{"1":"trav.satisf","_rn_":"12"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Il est à noter que si la recherche n’est pas sensible à la casse (i.e. aux majuscules et aux minuscules), elle est sensible aux accents.</p>
+<p>La méthode <code data-pkg="base">summary</code> qui fonctionne sur tout type d’objet permet d’avoir quelques statistiques de base sur les différentes variables de notre tableau, les statistiques affichées dépendant du type de variable.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="kw">summary</span>(d)</a></code></pre></div>
+<pre><code>       id              age           sexe     
+ Min.   :   1.0   Min.   :18.00   Homme: 899  
+ 1st Qu.: 500.8   1st Qu.:35.00   Femme:1101  
+ Median :1000.5   Median :48.00               
+ Mean   :1000.5   Mean   :48.16               
+ 3rd Qu.:1500.2   3rd Qu.:60.00               
+ Max.   :2000.0   Max.   :97.00               
+                                              
+                                                 nivetud   
+ Enseignement technique ou professionnel court       :463  
+ Enseignement superieur y compris technique superieur:441  
+ Derniere annee d&#39;etudes primaires                   :341  
+ 1er cycle                                           :204  
+ 2eme cycle                                          :183  
+ (Other)                                             :256  
+ NA&#39;s                                                :112  
+     poids                            occup     
+ Min.   :   78.08   Exerce une profession:1049  
+ 1st Qu.: 2221.82   Chomeur              : 134  
+ Median : 4631.19   Etudiant, eleve      :  94  
+ Mean   : 5535.61   Retraite             : 392  
+ 3rd Qu.: 7626.53   Retire des affaires  :  77  
+ Max.   :31092.14   Au foyer             : 171  
+                    Autre inactif        :  83  
+                      qualif    freres.soeurs   
+ Employe                 :594   Min.   : 0.000  
+ Ouvrier qualifie        :292   1st Qu.: 1.000  
+ Cadre                   :260   Median : 2.000  
+ Ouvrier specialise      :203   Mean   : 3.283  
+ Profession intermediaire:160   3rd Qu.: 5.000  
+ (Other)                 :144   Max.   :22.000  
+ NA&#39;s                    :347                   
+          clso                              relig    
+ Oui        : 936   Pratiquant regulier        :266  
+ Non        :1037   Pratiquant occasionnel     :442  
+ Ne sait pas:  27   Appartenance sans pratique :760  
+                    Ni croyance ni appartenance:399  
+                    Rejet                      : 93  
+                    NSP ou NVPR                : 40  
+                                                     
+                         trav.imp           trav.satisf 
+ Le plus important           : 29   Satisfaction  :480  
+ Aussi important que le reste:259   Insatisfaction:117  
+ Moins important que le reste:708   Equilibre     :451  
+ Peu important               : 52   NA&#39;s          :952  
+ NA&#39;s                        :952                       
+                                                        
+                                                        
+ hard.rock  lecture.bd peche.chasse cuisine    bricol    
+ Non:1986   Non:1953   Non:1776     Non:1119   Non:1147  
+ Oui:  14   Oui:  47   Oui: 224     Oui: 881   Oui: 853  
+                                                         
+                                                         
+                                                         
+                                                         
+                                                         
+ cinema     sport        heures.tv     
+ Non:1174   Non:1277   Min.   : 0.000  
+ Oui: 826   Oui: 723   1st Qu.: 1.000  
+                       Median : 2.000  
+                       Mean   : 2.247  
+                       3rd Qu.: 3.000  
+                       Max.   :12.000  
+                       NA&#39;s   :5       </code></pre>
+<p>On peut également appliquer <code data-pkg="base">summary</code> à une variable particulière.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="kw">summary</span>(d<span class="op">$</span>sexe)</a></code></pre></div>
+<pre><code>Homme Femme 
+  899  1101 </code></pre>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="kw">summary</span>(d<span class="op">$</span>age)</a></code></pre></div>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  18.00   35.00   48.00   48.16   60.00   97.00 </code></pre>
+<p>L’extension <code class="pkg">questionr</code> fournit également une fonction bien pratique pour décrire les différentes variables d’un tableau de données. Il s’agit de <code data-pkg="questionr">describe</code>. Faisons de suite un essai :</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1"><span class="kw">describe</span>(d)</a></code></pre></div>
+<pre><code>[2000 obs. x 20 variables] tbl_df tbl data.frame
+
+$id: 
+integer: 1 2 3 4 5 6 7 8 9 10 ...
+min: 1 - max: 2000 - NAs: 0 (0%) - 2000 unique values
+
+$age: 
+integer: 28 23 59 34 71 35 60 47 20 28 ...
+min: 18 - max: 97 - NAs: 0 (0%) - 78 unique values
+
+$sexe: 
+nominal factor: &quot;Femme&quot; &quot;Femme&quot; &quot;Homme&quot; &quot;Homme&quot; &quot;Femme&quot; &quot;Femme&quot; &quot;Femme&quot; &quot;Homme&quot; &quot;Femme&quot; &quot;Homme&quot; ...
+2 levels: Homme | Femme
+NAs: 0 (0%)
+
+$nivetud: 
+nominal factor: &quot;Enseignement superieur y compris technique superieur&quot; NA &quot;Derniere annee d&#39;etudes primaires&quot; &quot;Enseignement superieur y compris technique superieur&quot; &quot;Derniere annee d&#39;etudes primaires&quot; &quot;Enseignement technique ou professionnel court&quot; &quot;Derniere annee d&#39;etudes primaires&quot; &quot;Enseignement technique ou professionnel court&quot; NA &quot;Enseignement technique ou professionnel long&quot; ...
+8 levels: N&#39;a jamais fait d&#39;etudes | A arrete ses etudes, avant la derniere annee d&#39;etudes primaires | Derniere annee d&#39;etudes primaires | 1er cycle | 2eme cycle | Enseignement technique ou professionnel court | Enseignement technique ou professionnel long | Enseignement superieur y compris technique superieur
+NAs: 112 (5.6%)
+
+$poids: 
+numeric: 2634.3982157 9738.3957759 3994.1024587 5731.6615081 4329.0940022 8674.6993828 6165.8034861 12891.640759 7808.8720636 2277.160471 ...
+min: 78.0783403 - max: 31092.14132 - NAs: 0 (0%) - 1877 unique values
+
+$occup: 
+nominal factor: &quot;Exerce une profession&quot; &quot;Etudiant, eleve&quot; &quot;Exerce une profession&quot; &quot;Exerce une profession&quot; &quot;Retraite&quot; &quot;Exerce une profession&quot; &quot;Au foyer&quot; &quot;Exerce une profession&quot; &quot;Etudiant, eleve&quot; &quot;Exerce une profession&quot; ...
+7 levels: Exerce une profession | Chomeur | Etudiant, eleve | Retraite | Retire des affaires | Au foyer | Autre inactif
+NAs: 0 (0%)
+
+$qualif: 
+nominal factor: &quot;Employe&quot; NA &quot;Technicien&quot; &quot;Technicien&quot; &quot;Employe&quot; &quot;Employe&quot; &quot;Ouvrier qualifie&quot; &quot;Ouvrier qualifie&quot; NA &quot;Autre&quot; ...
+7 levels: Ouvrier specialise | Ouvrier qualifie | Technicien | Profession intermediaire | Cadre | Employe | Autre
+NAs: 347 (17.3%)
+
+$freres.soeurs: 
+integer: 8 2 2 1 0 5 1 5 4 2 ...
+min: 0 - max: 22 - NAs: 0 (0%) - 19 unique values
+
+$clso: 
+nominal factor: &quot;Oui&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; ...
+3 levels: Oui | Non | Ne sait pas
+NAs: 0 (0%)
+
+$relig: 
+nominal factor: &quot;Ni croyance ni appartenance&quot; &quot;Ni croyance ni appartenance&quot; &quot;Ni croyance ni appartenance&quot; &quot;Appartenance sans pratique&quot; &quot;Pratiquant regulier&quot; &quot;Ni croyance ni appartenance&quot; &quot;Appartenance sans pratique&quot; &quot;Ni croyance ni appartenance&quot; &quot;Appartenance sans pratique&quot; &quot;Pratiquant occasionnel&quot; ...
+6 levels: Pratiquant regulier | Pratiquant occasionnel | Appartenance sans pratique | Ni croyance ni appartenance | Rejet | NSP ou NVPR
+NAs: 0 (0%)
+
+$trav.imp: 
+nominal factor: &quot;Peu important&quot; NA &quot;Aussi important que le reste&quot; &quot;Moins important que le reste&quot; NA &quot;Le plus important&quot; NA &quot;Peu important&quot; NA &quot;Moins important que le reste&quot; ...
+4 levels: Le plus important | Aussi important que le reste | Moins important que le reste | Peu important
+NAs: 952 (47.6%)
+
+$trav.satisf: 
+nominal factor: &quot;Insatisfaction&quot; NA &quot;Equilibre&quot; &quot;Satisfaction&quot; NA &quot;Equilibre&quot; NA &quot;Insatisfaction&quot; NA &quot;Satisfaction&quot; ...
+3 levels: Satisfaction | Insatisfaction | Equilibre
+NAs: 952 (47.6%)
+
+$hard.rock: 
+nominal factor: &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$lecture.bd: 
+nominal factor: &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$peche.chasse: 
+nominal factor: &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$cuisine: 
+nominal factor: &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$bricol: 
+nominal factor: &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$cinema: 
+nominal factor: &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Oui&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$sport: 
+nominal factor: &quot;Non&quot; &quot;Oui&quot; &quot;Oui&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Oui&quot; &quot;Non&quot; &quot;Non&quot; &quot;Non&quot; &quot;Oui&quot; ...
+2 levels: Non | Oui
+NAs: 0 (0%)
+
+$heures.tv: 
+numeric: 0 1 0 2 3 2 2.9 1 2 2 ...
+min: 0 - max: 12 - NAs: 5 (0.2%) - 30 unique values</code></pre>
+<p>Comme on le voit sur cet exemple, <code data-pkg="questionr">describe</code> nous affiche le type des variables, les premières valeurs de chacune, le nombre de valeurs manquantes, le nombre de valeurs différentes (uniques) ainsi que quelques autres informations suivant le type de variables.</p>
+<p>Il est possible de restreindre l’affichage à seulement quelques variables en indiquant le nom de ces dernières.</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1"><span class="kw">describe</span>(d, <span class="st">&quot;age&quot;</span>, <span class="st">&quot;trav.satisf&quot;</span>)</a></code></pre></div>
+<pre><code>[2000 obs. x 20 variables] tbl_df tbl data.frame
+
+$age: 
+integer: 28 23 59 34 71 35 60 47 20 28 ...
+min: 18 - max: 97 - NAs: 0 (0%) - 78 unique values
+
+$trav.satisf: 
+nominal factor: &quot;Insatisfaction&quot; NA &quot;Equilibre&quot; &quot;Satisfaction&quot; NA &quot;Equilibre&quot; NA &quot;Insatisfaction&quot; NA &quot;Satisfaction&quot; ...
+3 levels: Satisfaction | Insatisfaction | Equilibre
+NAs: 952 (47.6%)</code></pre>
+<p>On peut également transmettre juste une variable :</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1"><span class="kw">describe</span>(d<span class="op">$</span>sexe)</a></code></pre></div>
+<pre><code>[2000 obs.] 
+nominal factor: &quot;Femme&quot; &quot;Femme&quot; &quot;Homme&quot; &quot;Homme&quot; &quot;Femme&quot; &quot;Femme&quot; &quot;Femme&quot; &quot;Homme&quot; &quot;Femme&quot; &quot;Homme&quot; ...
+2 levels: Homme | Femme
+NAs: 0 (0%)
+
+         n   %
+Homme  899  45
+Femme 1101  55
+Total 2000 100</code></pre>
+</div>
+</div>
+<div id="en-resume" class="section level2">
+<h2>En résumé</h2>
+<p><strong>Les Listes</strong></p>
+<ul>
+<li>Les listes sont des objets unidimensionnels pouvant contenir tout type d’objet, y compris d’autres listes.</li>
+<li>Elles ont une longueur que l’obtient avec <code data-pkg="base">length</code>.</li>
+<li>On créé une liste avec <code data-pkg="base">list</code> et on peut fusionner des listes avec <code data-pkg="base">append</code>.</li>
+<li>Tout comme les vecteurs, les listes peuvent être nommées et les noms des éléments s’obtiennent avec <code data-pkg="base">names</code>.</li>
+<li>Les crochets simples (<code>[]</code>) permettent de sélectionner les éléments d’une liste, en utilisant l’indexation par position, l’indexation par nom ou l’indexation par condition. Cela renvoie toujours une autre liste.</li>
+<li>Les doubles crochets (<code>[[]]</code>) renvoient directement le contenu d’un élément de la liste que l’on aura sélectionné par position ou par nom.</li>
+<li>Le symbole <code>$</code> est un raccourci pour facilement sélectionner un élément par son nom, <code>liste$nom</code> étant équivalent à <code>liste[["nom"]]</code>.</li>
+</ul>
+<p><strong>Les Tableaux de données</strong></p>
+<ul>
+<li>Les tableaux de données sont des listes avec des propriétés particulières :
+<ol style="list-style-type: lower-roman">
+<li>tous les éléments sont des vecteurs ;</li>
+<li>tous les vecteurs ont la même longueur ;</li>
+<li>tous les vecteurs ont un nom et ce nom est unique.</li>
+</ol></li>
+<li>On peut créer un tableau de données avec <code data-pkg="base">data.frame</code>.</li>
+<li>Les tableaux de données correspondent aux fichiers de données que l’on utilise usuellement dans d’autres logiciels de statistiques : les variables sont représentées en colonnes et les observations en lignes.</li>
+<li>Ce sont des objets bidimensionnels : <code data-pkg="base" data-rdoc="nrow">ncol</code> renvoit le nombre de colonnes et <code data-pkg="base">nrow</code> le nombre de lignes.</li>
+<li>Les doubles crochets (<code>[[]]</code>) et le symbole dollar (<code>$</code>) fonctionnent comme pour les listes et permettent d’accéder aux variables.</li>
+<li>Il est possible d’utiliser des coordonnées bidimensionnelles avec les crochets simples (<code>[]</code>) en indiquant un critère sur les lignes puis un critère sur les colonnes, séparés par une virgule (<code>,</code>).</li>
+</ul>
+</div>
+
+</article>
+</div>
+
+<div class="col-sm-3" role="complementary">
+<nav class="hidden-print hidden-xs" id="nav_sidebar">
+</nav>
+</div>
+
+</div>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+
+    // active menu
+    href = window.location.pathname;
+    href = href.substr(href.lastIndexOf('/') + 1);
+    if (href=='') href = 'index.html';
+    $('a[href="' + href + '"]').parent().addClass('active');
+    $('a[href="' + href + '"]').parent().parents('li').addClass('active');
+
+    // élargir la page d'accueil
+    if (href=='index.html') $('.col-sm-9').attr('class','col-sm-12');
+
+    // rechercher
+    $("#rechercher").submit(function(event) {
+      $('input[name="q"]').val($('input[name="q"]').val() + ' site:larmarange.github.io/analyse-R');
+    });
+
+    // sidebar
+    $("#nav_sidebar").append($("#TOC").html());
+    $("#nav_sidebar ul").addClass("nav nav-stacked");
+    $("#TOC").addClass("visible-xs-block");
+    $('body').scrollspy({
+      target: '#nav_sidebar',
+      offset: 40
+    });
+
+    // Identifier les <pre> fermant
+    $('pre').next("*:not(pre)").prev().addClass('last'); // Dernier <pre> de chaque groupe contigu de <pre>
+    $('pre').parent().each(function (){
+      $(this).children('pre').last().addClass('last');
+    }); // Si <pre> est le dernier enfant de son parent
+
+    // Ajout liens rdocumentation et tooltip
+    $("code[data-pkg]").each(function( index ) {
+      pkg = $(this).attr('data-pkg');
+      if ($(this).attr('data-rdoc') !== undefined) {
+        rdocumentation = $(this).attr('data-rdoc');
+      } else {
+        rdocumentation = $(this).text();
+      }
+      fonction = $(this).text();
+      //$(this).wrap('<a href="http://www.rdocumentation.org/packages/'+pkg+'/functions/'+rdocumentation+'">');
+      $(this).wrap('<a href="http://rdrr.io/pkg/'+pkg+'/sym/'+rdocumentation+'">');
+      $(this).attr('data-toggle','tooltip');
+      $(this).attr('data-placement','top');
+      $(this).attr('title','package : ' + pkg);
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $("code.pkg").each(function( index ) {
+      //$(this).wrap('<a href="http://www.rdocumentation.org/packages/'+$(this).text()+'">');
+      $(this).wrap('<a href="http://rdrr.io/pkg/'+$(this).text()+'">');
+    });
+
+    // Figures
+    $("figure").each(function( index ) {
+      if ($(this).children("figcaption").length > 0)
+        $(this).children("figcaption:first").prepend('<span class="figure-number">Figure '+(index+1)+'.</span> ');
+      else
+        $(this).append($("<figcaption>").append('<span class="figure-number">Figure '+(index+1)+'</span>'));
+    });
+
+    // Colorbox
+
+    /*----
+    jQuery('article div img').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'figures',
+      current: "",
+      href: function(){
+        return $(this).attr('src');
+      },
+      title: function(){
+        return $(this).attr('alt');
+      }
+    });
+    jQuery('article div img').css('cursor', 'pointer');
+    jQuery('figure img').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'figures',
+      current: "",
+      href: function(){
+        return $(this).attr('src');
+      },
+      title: function(){
+        return $(this).parent().children("figcaption").text();
+      }
+    });
+    jQuery('figure img').css('cursor', 'pointer');
+
+    -----*/
+
+    /* Clipboard --------------------------*/
+
+  function changeTooltipMessage(element, msg) {
+    var tooltipOriginalTitle=element.getAttribute('data-original-title');
+    element.setAttribute('data-original-title', msg);
+    $(element).tooltip('show');
+    element.setAttribute('data-original-title', tooltipOriginalTitle);
+  }
+
+  if(ClipboardJS.isSupported()) {
+    $(document).ready(function() {
+      var copyButton = "<button type='button' class='btn btn-primary btn-copy-ex' type = 'submit' title='Copier dans le presse-papier' aria-label='Copier dans le presse-papier' data-toggle='tooltip' data-placement='left auto' data-trigger='hover' data-clipboard-copy><i class='fa fa-copy'></i></button>";
+
+      $(".examples, div.sourceCode").addClass("hasCopyButton");
+
+      // Insert copy buttons:
+      $(copyButton).prependTo(".hasCopyButton");
+
+      // Initialize tooltips:
+      $('.btn-copy-ex').tooltip({container: 'body'});
+
+      // Initialize clipboard:
+      var clipboardBtnCopies = new ClipboardJS('[data-clipboard-copy]', {
+        text: function(trigger) {
+          return trigger.parentNode.textContent;
+        }
+      });
+
+      clipboardBtnCopies.on('success', function(e) {
+        changeTooltipMessage(e.trigger, 'Copié !');
+        e.clearSelection();
+      });
+
+      clipboardBtnCopies.on('error', function() {
+        changeTooltipMessage(e.trigger,'Appuyez sur Ctrl+C ou Command+C pour copier');
+      });
+    });
+  }
+
+  // Bigfoot
+  $(".footnotes > li").addClass("footnote");
+  $.bigfoot({
+    activateOnHover: true,
+    actionOriginalFN: "ignore"
+});
+});
+</script>
+
+<!-- Utterances comments --->
+<script src="https://utteranc.es/client.js"
+        repo="larmarange/analyse-R"
+        issue-term="pathname"
+        label="commentaires"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<!-- disqus -->
+<!---
+<div class="row">
+  <div id="disqus_thread" class="col-sm-9" role="complementary"></div>
+</div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'analyse-r'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Veuillez activer JavaScript pour voir les <a href="http://disqus.com/?ref_noscript">les commentaires gérés avec Disqus.</a></noscript>
+    <!--<a href="http://disqus.com" class="dsq-brlink">Les commentaires sont hébergés par <span class="logo-disqus">Disqus</span>.</a>-->
+
+<footer>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Contenus sous licence <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/fr/" rel="nofollow">Creative Commons Attribution - Pas d’utilisation commerciale - Partage dans les mêmes conditions</a>.<br />
+      Propulsé par <a href="http://www.r-project.org/" rel="nofollow">R</a>, </a><a href="http://www.rstudio.com/" rel="nofollow">RStudio</a>, <a href="http://rmarkdown.rstudio.com/" rel="nofollow">R Markdown</a>, <a href="http://yihui.name/knitr/" rel="nofollow">knitr</a>, <a href="http://pandoc.org/" rel="nofollow">pandoc</a> et <a href="http://www.princexml.com/" rel="nofollow">Prince XML</a>. Hébergé par <a href="https://github.com/" rel="nofollow">GitHub</a>.<br />
+      <a href="https://www.zenodo.org/badge/latestdoi/34986666"><img src="https://www.zenodo.org/badge/34986666.svg" alt="DOI"></a></p>
+    </div>
+  </div>
+</footer>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+
+</body>
+</html>
